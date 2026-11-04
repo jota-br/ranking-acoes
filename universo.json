@@ -1,610 +1,761 @@
 {
- "versao": "v002",
+ "versao": "v003",
  "data_referencia": "30/10/2026",
  "total": 151,
  "ativos": [
   {
    "ticker": "ABCB4",
+   "setor": "Bancos",
    "preco_ref_30_10": 22.32
   },
   {
    "ticker": "ABEV3",
+   "setor": "Alimentos e bebidas",
    "preco_ref_30_10": 14.55
   },
   {
    "ticker": "AGRO3",
+   "setor": "Agronegócio",
    "preco_ref_30_10": 17.2
   },
   {
    "ticker": "ALOS3",
+   "setor": "Shoppings e imóveis",
    "preco_ref_30_10": 23.55
   },
   {
    "ticker": "ALPA4",
+   "setor": "Calçados e vestuário",
    "preco_ref_30_10": 12.95
   },
   {
    "ticker": "ALUP11",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 31.29
   },
   {
    "ticker": "AMER3",
+   "setor": "Varejo",
    "preco_ref_30_10": 4.02
   },
   {
    "ticker": "ANIM3",
+   "setor": "Educação",
    "preco_ref_30_10": 2.39
   },
   {
    "ticker": "ARML3",
+   "setor": "Aluguel de veículos e equipamentos",
    "preco_ref_30_10": 2.98
   },
   {
    "ticker": "ASAI3",
+   "setor": "Varejo alimentar",
    "preco_ref_30_10": 7.81
   },
   {
    "ticker": "AUAU3",
+   "setor": "Serviços",
    "preco_ref_30_10": 3.85
   },
   {
    "ticker": "AURE3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 10.97
   },
   {
    "ticker": "AXIA3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 47.68
   },
   {
    "ticker": "AZZA3",
+   "setor": "Varejo",
    "preco_ref_30_10": 14.16
   },
   {
    "ticker": "B3SA3",
+   "setor": "Mercado de capitais",
    "preco_ref_30_10": 14.2
   },
   {
    "ticker": "BBAS3",
+   "setor": "Bancos",
    "preco_ref_30_10": 16.46
   },
   {
    "ticker": "BBDC4",
+   "setor": "Bancos",
    "preco_ref_30_10": 14.16
   },
   {
    "ticker": "BBSE3",
+   "setor": "Seguros",
    "preco_ref_30_10": 42.05
   },
   {
    "ticker": "BEEF3",
+   "setor": "Alimentos e bebidas",
    "preco_ref_30_10": 2.69
   },
   {
    "ticker": "BHIA3",
+   "setor": "Varejo",
    "preco_ref_30_10": 0.64
   },
   {
    "ticker": "BLAU3",
+   "setor": "Farmacêutico",
    "preco_ref_30_10": 9.35
   },
   {
    "ticker": "BMGB4",
+   "setor": "Bancos",
    "preco_ref_30_10": 5.16
   },
   {
    "ticker": "BMOB3",
+   "setor": "Tecnologia",
    "preco_ref_30_10": 24.27
   },
   {
    "ticker": "BPAC11",
+   "setor": "Bancos",
    "preco_ref_30_10": 54.04
   },
   {
    "ticker": "BRAP4",
+   "setor": "Mineração",
    "preco_ref_30_10": 17.78
   },
   {
    "ticker": "BRAV3",
+   "setor": "Petróleo e gás",
    "preco_ref_30_10": 17.86
   },
   {
    "ticker": "BRKM5",
+   "setor": "Química e petroquímica",
    "preco_ref_30_10": 3.02
   },
   {
    "ticker": "BRSR6",
+   "setor": "Bancos",
    "preco_ref_30_10": 12.55
   },
   {
    "ticker": "CAML3",
+   "setor": "Alimentos e bebidas",
    "preco_ref_30_10": 4.03
   },
   {
    "ticker": "CEAB3",
+   "setor": "Varejo",
    "preco_ref_30_10": 6.64
   },
   {
    "ticker": "CMIG4",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 10.07
   },
   {
    "ticker": "CMIN3",
+   "setor": "Mineração",
    "preco_ref_30_10": 4.5
   },
   {
    "ticker": "COGN3",
+   "setor": "Educação",
    "preco_ref_30_10": 1.61
   },
   {
    "ticker": "CPFE3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 42.51
   },
   {
    "ticker": "CPLE3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 14.5
   },
   {
    "ticker": "CSAN3",
+   "setor": "Combustíveis e distribuição",
    "preco_ref_30_10": 2.25
   },
   {
    "ticker": "CSMG3",
+   "setor": "Saneamento e resíduos",
    "preco_ref_30_10": 49.11
   },
   {
    "ticker": "CSNA3",
+   "setor": "Siderurgia e metalurgia",
    "preco_ref_30_10": 4.24
   },
   {
    "ticker": "CURY3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 26.16
   },
   {
    "ticker": "CVCB3",
+   "setor": "Serviços",
    "preco_ref_30_10": 0.8
   },
   {
    "ticker": "CXSE3",
+   "setor": "Seguros",
    "preco_ref_30_10": 21.5
   },
   {
    "ticker": "CYRE3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 17.37
   },
   {
    "ticker": "DASA3",
+   "setor": "Saúde",
    "preco_ref_30_10": 2.95
   },
   {
    "ticker": "DESK3",
+   "setor": "Telecomunicações",
    "preco_ref_30_10": 19.37
   },
   {
    "ticker": "DIRR3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 8.23
   },
   {
    "ticker": "DXCO3",
+   "setor": "Materiais de construção",
    "preco_ref_30_10": 4.49
   },
   {
    "ticker": "ECOR3",
+   "setor": "Concessões",
    "preco_ref_30_10": 5.2
   },
   {
    "ticker": "EGIE3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 26.46
   },
   {
    "ticker": "EMBJ3",
+   "setor": "Aeroespacial e defesa",
    "preco_ref_30_10": 102.4
   },
   {
    "ticker": "ENEV3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 25.83
   },
   {
    "ticker": "ENGI11",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 44.5
   },
   {
    "ticker": "EQTL3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 32.9
   },
   {
    "ticker": "EVEN3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 3.34
   },
   {
    "ticker": "EZTC3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 9.13
   },
   {
    "ticker": "FESA4",
+   "setor": "Siderurgia e metalurgia",
    "preco_ref_30_10": 5.15
   },
   {
    "ticker": "FLRY3",
+   "setor": "Saúde",
    "preco_ref_30_10": 20.74
   },
   {
    "ticker": "FRAS3",
+   "setor": "Autopeças",
    "preco_ref_30_10": 20.14
   },
   {
    "ticker": "GGBR4",
+   "setor": "Siderurgia e metalurgia",
    "preco_ref_30_10": 25.46
   },
   {
    "ticker": "GGPS3",
+   "setor": "Serviços",
    "preco_ref_30_10": 10.51
   },
   {
    "ticker": "GMAT3",
+   "setor": "Varejo alimentar",
    "preco_ref_30_10": 3.55
   },
   {
    "ticker": "GOAU4",
+   "setor": "Siderurgia e metalurgia",
    "preco_ref_30_10": 11.2
   },
   {
    "ticker": "GRND3",
+   "setor": "Calçados e vestuário",
    "preco_ref_30_10": 3.56
   },
   {
    "ticker": "HAPV3",
+   "setor": "Saúde",
    "preco_ref_30_10": 4.23
   },
   {
    "ticker": "HYPE3",
+   "setor": "Farmacêutico",
    "preco_ref_30_10": 21.52
   },
   {
    "ticker": "IGTI11",
+   "setor": "Shoppings e imóveis",
    "preco_ref_30_10": 22.2
   },
   {
    "ticker": "INTB3",
+   "setor": "Tecnologia",
    "preco_ref_30_10": 14.75
   },
   {
    "ticker": "IRBR3",
+   "setor": "Seguros",
    "preco_ref_30_10": 55.5
   },
   {
    "ticker": "ISAE4",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 24.9
   },
   {
    "ticker": "ITSA4",
+   "setor": "Holding financeira",
    "preco_ref_30_10": 12.85
   },
   {
    "ticker": "ITUB4",
+   "setor": "Bancos",
    "preco_ref_30_10": 39.54
   },
   {
    "ticker": "JALL3",
+   "setor": "Agronegócio",
    "preco_ref_30_10": 2.2
   },
   {
    "ticker": "JHSF3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 8.7
   },
   {
    "ticker": "JSLG3",
+   "setor": "Transporte e logística",
    "preco_ref_30_10": 5.26
   },
   {
    "ticker": "KEPL3",
+   "setor": "Bens de capital",
    "preco_ref_30_10": 6.4
   },
   {
    "ticker": "KLBN11",
+   "setor": "Papel e celulose",
    "preco_ref_30_10": 17.37
   },
   {
    "ticker": "LAND3",
+   "setor": "Agronegócio",
    "preco_ref_30_10": 9.44
   },
   {
    "ticker": "LEVE3",
+   "setor": "Autopeças",
    "preco_ref_30_10": 30.35
   },
   {
    "ticker": "LIGT3",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 2.38
   },
   {
    "ticker": "LJQQ3",
+   "setor": "Varejo",
    "preco_ref_30_10": 0.94
   },
   {
    "ticker": "LOGG3",
+   "setor": "Shoppings e imóveis",
    "preco_ref_30_10": 19.83
   },
   {
    "ticker": "LREN3",
+   "setor": "Varejo",
    "preco_ref_30_10": 9.38
   },
   {
    "ticker": "LWSA3",
+   "setor": "Tecnologia",
    "preco_ref_30_10": 3.24
   },
   {
    "ticker": "MATD3",
+   "setor": "Saúde",
    "preco_ref_30_10": 4.4
   },
   {
    "ticker": "MBRF3",
+   "setor": "Alimentos e bebidas",
    "preco_ref_30_10": 16.44
   },
   {
    "ticker": "MDIA3",
+   "setor": "Alimentos e bebidas",
    "preco_ref_30_10": 15.66
   },
   {
    "ticker": "MDNE3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 15.53
   },
   {
    "ticker": "MGLU3",
+   "setor": "Varejo",
    "preco_ref_30_10": 5.13
   },
   {
    "ticker": "MILS3",
+   "setor": "Aluguel de veículos e equipamentos",
    "preco_ref_30_10": 15.35
   },
   {
    "ticker": "MOTV3",
+   "setor": "Concessões",
    "preco_ref_30_10": 14.22
   },
   {
    "ticker": "MOVI3",
+   "setor": "Aluguel de veículos e equipamentos",
    "preco_ref_30_10": 5.87
   },
   {
    "ticker": "MRVE3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 4.04
   },
   {
    "ticker": "MTRE3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 2.82
   },
   {
    "ticker": "MULT3",
+   "setor": "Shoppings e imóveis",
    "preco_ref_30_10": 25.27
   },
   {
    "ticker": "MYPK3",
+   "setor": "Autopeças",
    "preco_ref_30_10": 8.51
   },
   {
    "ticker": "NATU3",
+   "setor": "Cosméticos",
    "preco_ref_30_10": 4.76
   },
   {
    "ticker": "ONCO3",
+   "setor": "Saúde",
    "preco_ref_30_10": 0.71
   },
   {
    "ticker": "ORVR3",
+   "setor": "Saneamento e resíduos",
    "preco_ref_30_10": 15.88
   },
   {
    "ticker": "PCAR3",
+   "setor": "Varejo alimentar",
    "preco_ref_30_10": 2.03
   },
   {
    "ticker": "PETR4",
+   "setor": "Petróleo e gás",
    "preco_ref_30_10": 52.2
   },
   {
    "ticker": "PGMN3",
+   "setor": "Farmácias",
    "preco_ref_30_10": 2.56
   },
   {
    "ticker": "PNVL3",
+   "setor": "Farmácias",
    "preco_ref_30_10": 10.29
   },
   {
    "ticker": "POMO4",
+   "setor": "Bens de capital",
    "preco_ref_30_10": 3.8
   },
   {
    "ticker": "POSI3",
+   "setor": "Tecnologia",
    "preco_ref_30_10": 3.11
   },
   {
    "ticker": "PRIO3",
+   "setor": "Petróleo e gás",
    "preco_ref_30_10": 70.47
   },
   {
    "ticker": "PSSA3",
+   "setor": "Seguros",
    "preco_ref_30_10": 45.86
   },
   {
    "ticker": "PTBL3",
+   "setor": "Materiais de construção",
    "preco_ref_30_10": 1.57
   },
   {
    "ticker": "QUAL3",
+   "setor": "Saúde",
    "preco_ref_30_10": 1.3
   },
   {
    "ticker": "RADL3",
+   "setor": "Farmácias",
    "preco_ref_30_10": 15.5
   },
   {
    "ticker": "RAIL3",
+   "setor": "Transporte e logística",
    "preco_ref_30_10": 14.24
   },
   {
    "ticker": "RAIZ4",
+   "setor": "Combustíveis e distribuição",
    "preco_ref_30_10": 0.28
   },
   {
    "ticker": "RANI3",
+   "setor": "Papel e celulose",
    "preco_ref_30_10": 6.93
   },
   {
    "ticker": "RAPT4",
+   "setor": "Autopeças",
    "preco_ref_30_10": 3.53
   },
   {
    "ticker": "RDOR3",
+   "setor": "Saúde",
    "preco_ref_30_10": 32.35
   },
   {
    "ticker": "RECV3",
+   "setor": "Petróleo e gás",
    "preco_ref_30_10": 10.75
   },
   {
    "ticker": "RENT3",
+   "setor": "Aluguel de veículos e equipamentos",
    "preco_ref_30_10": 29.03
   },
   {
    "ticker": "RIAA3",
+   "setor": "Varejo",
    "preco_ref_30_10": 6.1
   },
   {
    "ticker": "ROMI3",
+   "setor": "Bens de capital",
    "preco_ref_30_10": 5.37
   },
   {
    "ticker": "SANB11",
+   "setor": "Bancos",
    "preco_ref_30_10": 24.64
   },
   {
    "ticker": "SAPR11",
+   "setor": "Saneamento e resíduos",
    "preco_ref_30_10": 31.85
   },
   {
    "ticker": "SAUD3",
+   "setor": "Saúde",
    "preco_ref_30_10": 14.77
   },
   {
    "ticker": "SBFG3",
+   "setor": "Varejo",
    "preco_ref_30_10": 4.94
   },
   {
    "ticker": "SBSP3",
+   "setor": "Saneamento e resíduos",
    "preco_ref_30_10": 25.14
   },
   {
    "ticker": "SEER3",
+   "setor": "Educação",
    "preco_ref_30_10": 10.92
   },
   {
    "ticker": "SHUL4",
+   "setor": "Bens de capital",
    "preco_ref_30_10": 4.13
   },
   {
    "ticker": "SIMH3",
+   "setor": "Transporte e logística",
    "preco_ref_30_10": 4.83
   },
   {
    "ticker": "SLCE3",
+   "setor": "Agronegócio",
    "preco_ref_30_10": 17.01
   },
   {
    "ticker": "SMAL11",
+   "setor": "ETF",
    "preco_ref_30_10": 92.5
   },
   {
    "ticker": "SMFT3",
+   "setor": "Serviços",
    "preco_ref_30_10": 15.55
   },
   {
    "ticker": "SMTO3",
+   "setor": "Agronegócio",
    "preco_ref_30_10": 19.55
   },
   {
    "ticker": "SUZB3",
+   "setor": "Papel e celulose",
    "preco_ref_30_10": 49.72
   },
   {
    "ticker": "TAEE11",
+   "setor": "Energia elétrica",
    "preco_ref_30_10": 39.2
   },
   {
    "ticker": "TASA4",
+   "setor": "Aeroespacial e defesa",
    "preco_ref_30_10": 4.8
   },
   {
    "ticker": "TEND3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 20.34
   },
   {
    "ticker": "TGMA3",
+   "setor": "Transporte e logística",
    "preco_ref_30_10": 36.07
   },
   {
    "ticker": "TIMS3",
+   "setor": "Telecomunicações",
    "preco_ref_30_10": 19.43
   },
   {
    "ticker": "TOTS3",
+   "setor": "Tecnologia",
    "preco_ref_30_10": 33.23
   },
   {
    "ticker": "TRIS3",
+   "setor": "Construção civil",
    "preco_ref_30_10": 4.22
   },
   {
    "ticker": "TTEN3",
+   "setor": "Agronegócio",
    "preco_ref_30_10": 10.27
   },
   {
    "ticker": "TUPY3",
+   "setor": "Autopeças",
    "preco_ref_30_10": 15.03
   },
   {
    "ticker": "UGPA3",
+   "setor": "Combustíveis e distribuição",
    "preco_ref_30_10": 32.01
   },
   {
    "ticker": "UNIP6",
+   "setor": "Química e petroquímica",
    "preco_ref_30_10": 50.0
   },
   {
    "ticker": "USIM5",
+   "setor": "Siderurgia e metalurgia",
    "preco_ref_30_10": 5.47
   },
   {
    "ticker": "VALE3",
+   "setor": "Mineração",
    "preco_ref_30_10": 60.05
   },
   {
    "ticker": "VAMO3",
+   "setor": "Aluguel de veículos e equipamentos",
    "preco_ref_30_10": 2.46
   },
   {
    "ticker": "VBBR3",
+   "setor": "Combustíveis e distribuição",
    "preco_ref_30_10": 30.46
   },
   {
    "ticker": "VIVA3",
+   "setor": "Varejo",
    "preco_ref_30_10": 17.35
   },
   {
    "ticker": "VIVT3",
+   "setor": "Telecomunicações",
    "preco_ref_30_10": 30.75
   },
   {
    "ticker": "VLID3",
+   "setor": "Serviços",
    "preco_ref_30_10": 14.2
   },
   {
    "ticker": "VULC3",
+   "setor": "Calçados e vestuário",
    "preco_ref_30_10": 11.59
   },
   {
    "ticker": "WEGE3",
+   "setor": "Bens de capital",
    "preco_ref_30_10": 49.28
   },
   {
    "ticker": "YDUQ3",
+   "setor": "Educação",
    "preco_ref_30_10": 8.96
   }
  ]
