@@ -2,6 +2,12 @@
 
 Cada mudança relevante vira uma versão numerada. Para desfazer, volte ao arquivo da versão anterior.
 
+## v005 — cotações dos 151 e página lendo analises.json
+- A rotina das 19h passa a ler os tickers do universo.json e atualiza os 151 (brapi, 1 por vez, com tentativa dupla).
+- A página passa a montar o ranking a partir do analises.json (os 20 iniciais) e a mostrar o preço atual de todos os ativos do universo. Se o analises.json faltar, usa os 20 embutidos no código.
+- Arquivos: index.html (v005), analises.json (v005), update-prices.yml (v005). Para voltar: index-v004.html (página) e o histórico do arquivo update-prices.yml no GitHub (rotina com 20 ativos).
+- Setores na página agora seguem o universo.json (por exemplo, VIVA3 passa a aparecer como "Varejo").
+
 ## v004 — seção "Universo monitorado" na página
 - Nova tabela com os 151 ativos (ticker, setor, preço de referência de 30/10, preço atual e variação para os 20 da carteira), com busca, filtro de setor e opção "só os 20".
 - Arquivos: index.html (v004) e universo.json (v003). Para voltar: index-v003.html (página sem a seção).

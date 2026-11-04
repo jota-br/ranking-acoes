@@ -1,0 +1,426 @@
+{
+ "versao": "v005",
+ "data_atualizacao": "30/10/2026",
+ "ativos": [
+  {
+   "ticker": "VIVA3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 33.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 18,
+    "ideal_de": 18,
+    "ideal_ate": 20
+   },
+   "risco": "Médio/alto",
+   "nivel": 1,
+   "peso": 9,
+   "data_balanco": "05/11",
+   "plano": "50% agora · 25% após resultado bom · 25% em queda/pânico sem deterioração da tese",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "DIRR3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 15.75,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 8.5,
+    "ideal_de": 8.5,
+    "ideal_ate": 10
+   },
+   "risco": "Médio",
+   "nivel": 1,
+   "peso": 8,
+   "data_balanco": "09/11",
+   "plano": "50% agora · 25% se cair a R$7,50–8,00 · 25% após resultado. Se bom e abaixo de R$9: aumentar",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "MDNE3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 28.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 16,
+    "ideal_de": 16,
+    "ideal_ate": 18
+   },
+   "risco": "Médio",
+   "nivel": 1,
+   "peso": 8,
+   "data_balanco": "05/11",
+   "plano": "60% agora · 20% abaixo de R$15 · 20% após resultado",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "MOVI3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 10,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 6,
+    "ideal_de": 6,
+    "ideal_ate": 7
+   },
+   "risco": "Alto",
+   "nivel": 1,
+   "peso": 7,
+   "data_balanco": "11/11",
+   "plano": "70% agora · 30% em correção. 3T26 citado como já divulgado, com melhora operacional",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "CYRE3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 29,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 18,
+    "ideal_de": 18,
+    "ideal_ate": 20
+   },
+   "risco": "Médio",
+   "nivel": 1,
+   "peso": 7,
+   "data_balanco": "12/11",
+   "plano": "50% agora · 25% a R$16–17 · 25% após 3T26",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "RIAA3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 9.75,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 6,
+    "ideal_de": 6,
+    "ideal_ate": 7
+   },
+   "risco": "Médio/alto",
+   "nivel": 2,
+   "peso": 4,
+   "data_balanco": "09/11",
+   "plano": "P/L 2x enganoso: lucro extraordinário do Midway. Mesmo normalizada, vê valor",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "EZTC3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 14.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 9,
+    "ideal_de": 9,
+    "ideal_ate": 10
+   },
+   "risco": "Médio",
+   "nivel": 2,
+   "peso": 4,
+   "data_balanco": "05/11",
+   "plano": "Tese patrimonial, P/VP 0,48x. Menos crescimento operacional que DIRR3/MDNE3",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "JHSF3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 13.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 8,
+    "ideal_de": 8,
+    "ideal_ate": 9.5
+   },
+   "risco": "Médio/alto",
+   "nivel": 2,
+   "peso": 4,
+   "data_balanco": "12/11",
+   "plano": "Desconto e posição financeira boas; lucro contábil precisa ser normalizado",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "ALOS3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 33.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 23,
+    "ideal_de": 23,
+    "ideal_ate": 26
+   },
+   "risco": "Baixo/médio",
+   "nivel": 2,
+   "peso": 6,
+   "data_balanco": "05/11",
+   "plano": "Qualidade + geração de caixa + valuation + dividendos; equilibra as posições agressivas",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "TOTS3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 47,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 34,
+    "ideal_de": 34,
+    "ideal_ate": 37
+   },
+   "risco": "Baixo/médio",
+   "nivel": 2,
+   "peso": 6,
+   "data_balanco": "04/11",
+   "plano": "Contraponto de qualidade; menos dependente de reprecificação de ativos",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "ASAI3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 11,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 7.5,
+    "ideal_de": 7.5,
+    "ideal_ate": 8.5
+   },
+   "risco": "Alto",
+   "nivel": 3,
+   "peso": 5,
+   "data_balanco": "05/11",
+   "plano": "Aposta de recuperação: 40% agora · 60% depois. Depende de margem, vendas e desalavancagem",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "BBAS3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 22.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 16.5,
+    "ideal_de": 16.5,
+    "ideal_ate": 18
+   },
+   "risco": "Médio/alto",
+   "nivel": 3,
+   "peso": 6,
+   "data_balanco": "11/11",
+   "plano": "P/L 6,13x · P/VP 0,51x. Risco político e de crédito. 50% agora · 50% após resultado; se cair a R$14–15, muito interessante",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "SMAL11",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 125,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 90,
+    "ideal_de": 90,
+    "ideal_ate": 100
+   },
+   "risco": "Médio",
+   "nivel": 3,
+   "peso": 6,
+   "data_balanco": "—",
+   "plano": "Diversificação via índice",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "RAIL3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 19,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 14,
+    "ideal_de": 14,
+    "ideal_ate": 15.5
+   },
+   "risco": "Médio",
+   "nivel": 3,
+   "peso": 4,
+   "data_balanco": "11/11",
+   "plano": "",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "LEVE3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 40,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 29,
+    "ideal_de": 29,
+    "ideal_ate": 32
+   },
+   "risco": "Médio",
+   "nivel": 3,
+   "peso": 3,
+   "data_balanco": "11/11",
+   "plano": "",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "BBDC4",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 18.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 13.5,
+    "ideal_de": 13.5,
+    "ideal_ate": 15
+   },
+   "risco": "Médio",
+   "nivel": 3,
+   "peso": 4,
+   "data_balanco": "—",
+   "plano": "",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "VLID3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 18.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 13.5,
+    "ideal_de": 13.5,
+    "ideal_ate": 15
+   },
+   "risco": "Baixo/médio",
+   "nivel": 3,
+   "peso": 3,
+   "data_balanco": "—",
+   "plano": "",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "MOTV3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 18,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 14,
+    "ideal_de": 14,
+    "ideal_ate": 15.5
+   },
+   "risco": "Médio",
+   "nivel": 3,
+   "peso": 2,
+   "data_balanco": "—",
+   "plano": "",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "RENT3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 36.5,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 28,
+    "ideal_de": 28,
+    "ideal_ate": 30
+   },
+   "risco": "Médio",
+   "nivel": 3,
+   "peso": 3,
+   "data_balanco": "05/11",
+   "plano": "",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  },
+  {
+   "ticker": "HYPE3",
+   "valor_justo": {
+    "pessimista": null,
+    "base": 27,
+    "otimista": null
+   },
+   "compra": {
+    "agressiva_ate": 21,
+    "ideal_de": 21,
+    "ideal_ate": 23
+   },
+   "risco": "Médio",
+   "nivel": 3,
+   "peso": 1,
+   "data_balanco": "—",
+   "plano": "",
+   "tese": "",
+   "fonte": "Análise inicial (30/10/2026)",
+   "data_dos_dados": "30/10/2026"
+  }
+ ]
+}
