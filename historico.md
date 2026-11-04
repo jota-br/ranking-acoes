@@ -2,6 +2,10 @@
 
 Cada mudança relevante vira uma versão numerada. Para desfazer, volte ao arquivo da versão anterior.
 
+## v004 — seção "Universo monitorado" na página
+- Nova tabela com os 151 ativos (ticker, setor, preço de referência de 30/10, preço atual e variação para os 20 da carteira), com busca, filtro de setor e opção "só os 20".
+- Arquivos: index.html (v004) e universo.json (v003). Para voltar: index-v003.html (página sem a seção).
+
 ## v003 — setores aprovados para os 151 ativos
 - Cada ativo ganhou um setor (35 setores, de Siderurgia e metalurgia a ETF). Setores aprovados por Jota; agrupamentos podem ser revistos depois.
 - Arquivo: universo.json (igual a universo-v003.json). Para voltar ao estado anterior (sem setores): universo-v002.json.
