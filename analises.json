@@ -1,5 +1,5 @@
 {
- "versao": "v006",
+ "versao": "v007",
  "data_atualizacao": "04/11/2026",
  "ativos": [
   {
@@ -30,7 +30,30 @@
     "pessimista": 14.95,
     "otimista": 29.9
    },
-   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado. Comparativo pela política (P/L 7/10/13x, ajuste de risco -1x por risco Médio/alto): lucro recorrente de 12 meses R$ 585,80 mi ÷ 235,14 mi de ações = LPA R$ 2,49; x 9x = R$ 22,42 (pessimista 14,95; otimista 29,90). Insumos informados pelo ChatGPT, não auditados."
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado. Comparativo pela política (P/L 7/10/13x, ajuste de risco -1x por risco Médio/alto): lucro recorrente de 12 meses R$ 585,80 mi ÷ 235,14 mi de ações = LPA R$ 2,49; x 9x = R$ 22,42 (pessimista 14,95; otimista 29,90). Insumos informados pelo ChatGPT, não auditados.",
+   "historico_multiplo": {
+    "anos": {
+     "2021": 20.13,
+     "2022": 14.68,
+     "2023": 21.91,
+     "2024": 6.96,
+     "2025": 12.65
+    },
+    "atual": 7.39,
+    "mediana_5a": 14.68,
+    "media_5a": 15.27,
+    "n_validos": 5,
+    "ref": {
+     "valor": 13.45,
+     "rotulo": "valor original"
+    },
+    "desvio_pct": -8.4,
+    "texto": "Mediana de 2021 a 2025: 14,7x (média 15,3x; mínimo 7,0x; máximo 21,9x). Atual: 7,4x. Aqui, o valor original (33,50) equivale a 13,4x o lucro por ação, 8% abaixo da mediana. Pela política (P/L 9,0x) o desvio seria de -39%.",
+    "indicador": "P/L",
+    "fonte": "Investidor10",
+    "data": "05/11/2026"
+   },
+   "conferido": "LPA conferido nos sites Status Invest e Investidor10 em 05/11/2026 (diferença de até 0,5%)."
   },
   {
    "ticker": "DIRR3",
@@ -60,7 +83,30 @@
     "pessimista": 9.89,
     "otimista": 18.12
    },
-   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado. Comparativo pela política (P/L 6/8,5/11x, ajuste de risco +0x por risco Médio): lucro recorrente de 12 meses R$ 856,00 mi ÷ 519,51 mi de ações = LPA R$ 1,65; x 8,5x = R$ 14,01 (pessimista 9,89; otimista 18,12). Insumos informados pelo ChatGPT, não auditados."
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado. Comparativo pela política (P/L 6/8,5/11x, ajuste de risco +0x por risco Médio): lucro recorrente de 12 meses R$ 856,00 mi ÷ 519,51 mi de ações = LPA R$ 1,65; x 8,5x = R$ 14,01 (pessimista 9,89; otimista 18,12). Insumos informados pelo ChatGPT, não auditados.",
+   "historico_multiplo": {
+    "anos": {
+     "2021": 13.82,
+     "2022": 12.99,
+     "2023": 11.72,
+     "2024": 7.23,
+     "2025": 9.31
+    },
+    "atual": 5.13,
+    "mediana_5a": 11.72,
+    "media_5a": 11.01,
+    "n_validos": 5,
+    "ref": {
+     "valor": 9.56,
+     "rotulo": "valor original"
+    },
+    "desvio_pct": -18.4,
+    "texto": "Mediana de 2021 a 2025: 11,7x (média 11,0x; mínimo 7,2x; máximo 13,8x). Atual: 5,1x. Aqui, o valor original (15,75) equivale a 9,6x o lucro por ação, 18% abaixo da mediana. Pela política (P/L 8,5x) o desvio seria de -27%.",
+    "indicador": "P/L",
+    "fonte": "Investidor10",
+    "data": "05/11/2026"
+   },
+   "conferido": "LPA conferido nos sites Status Invest e Investidor10 em 05/11/2026 (diferença de até 0,5%)."
   },
   {
    "ticker": "MDNE3",
@@ -540,9 +586,32 @@
    "fonte": "Release 2T26 DRE e histórico 3T25-2T26 | FRE 2026 composição acionária | RI calendário",
    "data_dos_dados": "30/06/2026",
    "origem": "politica",
-   "verificado": false,
+   "verificado": true,
    "criterio_curto": "P/L 8,5x x LPA R$ 3,56 = R$ 30,30.",
-   "criterio_detalhe": "Método: P/L sobre o lucro recorrente de 12 meses. Conta: R$ 1.098,00 mi ÷ 308,05 mi de ações = LPA R$ 3,56; x 8,5x = R$ 30,30. Cenários: 6x / 8,5x / 11x (política da família Construção civil, 6/8,5/11x, com ajuste de +0x por risco Médio). Insumos informados pelo ChatGPT, não auditados. Fonte: Release 2T26 DRE e histórico 3T25-2T26 | FRE 2026 composição acionária | RI calendário. Dados de 30/06/2026."
+   "criterio_detalhe": "Método: P/L sobre o lucro recorrente de 12 meses. Conta: R$ 1.098,00 mi ÷ 308,05 mi de ações = LPA R$ 3,56; x 8,5x = R$ 30,30. Cenários: 6x / 8,5x / 11x (política da família Construção civil, 6/8,5/11x, com ajuste de +0x por risco Médio). LPA conferido nos sites Status Invest e Investidor10 em 05/11/2026. Fonte: Release 2T26 DRE e histórico 3T25-2T26 | FRE 2026 composição acionária | RI calendário. Dados de 30/06/2026.",
+   "historico_multiplo": {
+    "anos": {
+     "2021": 6.94,
+     "2022": 11.82,
+     "2023": 11.5,
+     "2024": 8.28,
+     "2025": 10.18
+    },
+    "atual": 7.55,
+    "mediana_5a": 10.18,
+    "media_5a": 9.74,
+    "n_validos": 5,
+    "ref": {
+     "valor": 8.5,
+     "rotulo": "política"
+    },
+    "desvio_pct": -16.5,
+    "texto": "Mediana de 2021 a 2025: 10,2x (média 9,7x; mínimo 6,9x; máximo 11,8x). Atual: 7,5x. Aqui, o múltiplo base da política é 8,5x, 17% abaixo da mediana.",
+    "indicador": "P/L",
+    "fonte": "Investidor10",
+    "data": "05/11/2026"
+   },
+   "conferido": "LPA conferido nos sites Status Invest e Investidor10 em 05/11/2026 (diferença de até 0,5%)."
   },
   {
    "ticker": "TEND3",
@@ -575,7 +644,27 @@
    "origem": "politica",
    "verificado": false,
    "criterio_curto": "P/L 7,5x x LPA R$ 4,34 = R$ 32,55.",
-   "criterio_detalhe": "Método: P/L sobre o lucro recorrente de 12 meses. Conta: R$ 532,00 mi ÷ 122,56 mi de ações = LPA R$ 4,34; x 7,5x = R$ 32,55. Cenários: 5x / 7,5x / 10x (política da família Construção civil, 6/8,5/11x, com ajuste de -1x por risco Médio/alto). Insumos informados pelo ChatGPT, não auditados. Fonte: ITR 2T26 lucro UDM ex-swap | Release 1T26 e 2T26 | Prévia operacional 3T26 | FRE 2026. Dados de 30/06/2026. Balanço do 3T26 ainda não incorporado."
+   "criterio_detalhe": "Método: P/L sobre o lucro recorrente de 12 meses. Conta: R$ 532,00 mi ÷ 122,56 mi de ações = LPA R$ 4,34; x 7,5x = R$ 32,55. Cenários: 5x / 7,5x / 10x (política da família Construção civil, 6/8,5/11x, com ajuste de -1x por risco Médio/alto). Insumos informados pelo ChatGPT, não auditados. Fonte: ITR 2T26 lucro UDM ex-swap | Release 1T26 e 2T26 | Prévia operacional 3T26 | FRE 2026. Dados de 30/06/2026. Balanço do 3T26 ainda não incorporado. O LPA do site é R$ 4,72 e a nossa conta usa R$ 4,34, sem o efeito de swap (8% menor).",
+   "historico_multiplo": {
+    "anos": {
+     "2021": -10.7,
+     "2022": -0.95,
+     "2023": -18.97,
+     "2024": 14.33,
+     "2025": 5.95
+    },
+    "atual": 4.62,
+    "mediana_5a": null,
+    "n_validos": 2,
+    "texto": "Só 2 dos 5 anos têm lucro (P/L positivo), então a mediana não é confiável. Atual: 4,6x.",
+    "ref": {
+     "valor": 7.5,
+     "rotulo": "política"
+    },
+    "indicador": "P/L",
+    "fonte": "Investidor10",
+    "data": "05/11/2026"
+   }
   },
   {
    "ticker": "ITUB4",
@@ -607,7 +696,7 @@
    "origem": "politica",
    "verificado": false,
    "criterio_curto": "P/VP por Gordon: 1,78x x VPA R$ 19,95 = R$ 35,47.",
-   "criterio_detalhe": "Método: P/VP por Gordon. VPA = patrimônio líquido R$ 219.894,00 mi ÷ 11.021,79 mi de ações = R$ 19,95. P/VP justo = (ROE sustentável − g) ÷ (Ke − g), com Ke 15%: pessimista (18%; 5%) 1,30x; base (22%; 6%) 1,78x; otimista (23%; 7%) 2,00x. Valor justo base = 19,95 x 1,78x = R$ 35,47. Insumos informados pelo ChatGPT, não auditados. Fonte: Kit do Investidor 3T26 PL controlador | Análise Gerencial 3T26 ROE | Composição acionária 19/05/2026. Dados de 30/09/2026."
+   "criterio_detalhe": "Método: P/VP por Gordon. VPA = patrimônio líquido R$ 219.894,00 mi ÷ 11.021,79 mi de ações = R$ 19,95. P/VP justo = (ROE sustentável − g) ÷ (Ke − g), com Ke 15%: pessimista (18%; 5%) 1,30x; base (22%; 6%) 1,78x; otimista (23%; 7%) 2,00x. Valor justo base = 19,95 x 1,78x = R$ 35,47. Insumos informados pelo ChatGPT, não auditados. Fonte: Kit do Investidor 3T26 PL controlador | Análise Gerencial 3T26 ROE | Composição acionária 19/05/2026. Dados de 30/09/2026. VPA da conta: R$ 19,95; Status Invest: R$ 19,75; Investidor10: R$ 20,79. Série histórica de P/VP não recuperada."
   }
  ]
 }

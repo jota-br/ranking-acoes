@@ -2,6 +2,14 @@
 
 Cada mudança relevante vira uma versão numerada. Para desfazer, volte ao arquivo da versão anterior.
 
+## v007 — histórico de múltiplos, selos conferidos e gráfico nos detalhes
+- Entra o P/L anual de 2021 a 2025 (Investidor10, lido pelo ChatGPT em 05/11/2026) para VIVA3, DIRR3, CURY3 e TEND3. Nos detalhes: mediana, média, mínimo, máximo, atual e um gráfico de barras com a linha do múltiplo de referência.
+- Alerta (⚠) quando o múltiplo de referência fica mais de 30% longe da mediana de 5 anos. Nenhum ativo disparou o alerta nesta versão.
+- Selo ✓ (LPA conferido em dois sites, 05/11/2026) em VIVA3, DIRR3 e CURY3. TEND3 e ITUB4 seguem com o selo IA, com nota sobre as diferenças.
+- RIAA3 fora: os dois sites divergem 2x no LPA e no VPA, e o P/L histórico é distorcido.
+- A partir daqui não enviamos mais cópias de segurança dos arquivos: cada commit no GitHub é o ponto de retorno.
+- Arquivos: index.html, analises.json, historico.md.
+
 ## v006 — política de valuation, critério nos balões/detalhes e nível automático
 - Nova política de múltiplos por setor (politica-valuation.md e politica.json). Múltiplos e faixas são propostas de Jota para teste.
 - A página mostra o critério de cada valor justo (balão ⓘ na coluna FV base e conta completa ao clicar na linha), o marcador ⚑ para desvios aprovados e o selo IA nos ativos com insumos não auditados.
