@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ranking de Ações — Matriz Fundamentalista</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#14181f;--mu:#667085;--bd:#e4e7ec;--ac:#2563eb;--gr:#16a34a;--am:#d97706;--rd:#dc2626;--t1:#2563eb;--t2:#7c3aed;--t3:#94a3b8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1116;--card:#171b22;--tx:#e8ebf0;--mu:#8b95a5;--bd:#262c36;--ac:#60a5fa;--gr:#4ade80;--am:#fbbf24;--rd:#f87171;--t1:#60a5fa;--t2:#a78bfa;--t3:#64748b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1116;--card:#171b22;--tx:#e8ebf0;--mu:#8b95a5;--bd:#262c36;--ac:#60a5fa;--gr:#4ade80;--am:#fbbf24;--rd:#f87171;--t1:#60a5fa;--t2:#a78bfa;--t3:#64748b;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:1200px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:0}h2{font-size:15px;margin:0 0 10px}.sub{color:var(--mu);font-size:12px}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.g{display:grid;gap:12px}.k{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.c2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.cd{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;min-width:0}
+.kv{font-size:24px;font-weight:700}.kl{color:var(--mu);font-size:12px}
+.sc{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:900px}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--bd);white-space:nowrap}#tb th:nth-child(-n+3),#tb td:nth-child(-n+3),#sm th:first-child,#sm td:first-child{text-align:left}
+th{color:var(--mu);font-size:12px;cursor:pointer;user-select:none}th:hover{color:var(--ac)}
+tr.r{cursor:pointer}tr.r:hover{background:color-mix(in srgb,var(--ac) 8%,transparent)}
+.bar{display:inline-block;height:8px;border-radius:4px;background:var(--gr);vertical-align:middle}
+.tg{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:600;color:#fff}
+.z1{background:var(--gr)}.z2{background:var(--am)}.z3{background:var(--mu)}
+.f{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+button{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:99px;padding:4px 12px;cursor:pointer}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.dt td{text-align:left;white-space:normal;background:color-mix(in srgb,var(--ac) 5%,transparent)}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.tl{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}.tl>div{min-width:130px;border-left:3px solid var(--ac);padding:2px 8px}
+.tl b{display:block}.pl{display:flex;gap:2px;height:14px;margin-top:4px}.pl i{display:block;border-radius:3px}
+svg{width:100%;height:auto;display:block}svg text{fill:var(--mu);font-size:11px}
+.lg span{display:inline-flex;align-items:center;gap:4px;margin-right:12px;font-size:12px;color:var(--mu)}.lg i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.ft{color:var(--mu);font-size:11px;margin-top:14px}
+#tip{position:fixed;display:none;max-width:260px;background:var(--tx);color:var(--bg);padding:8px 10px;border-radius:8px;font-size:12px;line-height:1.4;z-index:50;box-shadow:0 4px 14px rgba(0,0,0,.3);pointer-events:none}
+.i{color:var(--ac);font-size:11px}[data-tip]{cursor:help}
+input,select{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:5px 8px}label{font-size:12px;color:var(--mu);display:flex;flex-direction:column;gap:2px}input[type=number]{width:130px}#sm{min-width:560px}#ut{min-width:560px}#ut th:nth-child(-n+2),#ut td:nth-child(-n+2){text-align:left}
+</style></head><body><div class="w">
+<div class="hd"><div><h1>📊 Ranking de Ações — Matriz Fundamentalista</h1><div class="sub">Preços de referência de <b id="pd">30/10/2026</b> (não são cotações ao vivo) · upside = FV base ÷ preço − 1</div></div><button id="th">🌓 Tema</button></div>
+<div class="g k" id="kp"></div>
+<div class="cd" style="margin-top:12px"><h2>🏅 Ranking completo <span class="sub">(clique no cabeçalho para ordenar, na linha para ver o plano de entrada)</span></h2>
+<div class="f" id="fl"></div><div class="f"><select id="sf"></select></div><div class="sc"><table id="tb"></table></div></div>
+<div class="cd" style="margin-top:12px"><h2 data-tip="Informe o capital e quantos ativos quer. Os pesos sugeridos pela análise são mantidos e reescalados para somar 100% dos ativos escolhidos. Clique nos ativos para incluir ou retirar.">🧮 Simulador de carteira <span class="i">ⓘ</span></h2><div class="f"><label>Capital (R$)<input id="cap" type="number" min="0" step="1000" value="100000"></label><label>Nº de ativos (maiores pesos)<input id="nn" type="number" min="1" max="20" value="20"></label><label>Reserva de caixa (%)<input id="cx" type="number" min="0" max="90" value="0"></label></div><div class="f" id="chips"></div><div class="sc"><table id="sm"></table></div><div class="sub" id="sn" style="margin-top:6px"></div></div>
+<div class="g c2" style="margin-top:12px">
+<div class="cd"><h2 data-tip="Distância percentual entre o preço atual e o FV base de cada ativo. Cor da barra = nível de prioridade.">📈 Upside por ativo <span class="i">ⓘ</span></h2><div id="up"></div></div>
+<div class="cd"><h2 data-tip="Cada ponto é um ativo: horizontal = risco, vertical = upside. O ideal é ficar no alto e à esquerda (mais retorno, menos risco). Tamanho = peso na carteira.">🎯 Risco × Upside <span class="i">ⓘ</span></h2><div id="sx"></div><div class="lg"><span><i style="background:var(--t1)"></i>Nível 1</span><span><i style="background:var(--t2)"></i>Nível 2</span><span><i style="background:var(--t3)"></i>Nível 3</span></div></div>
+<div class="cd"><h2 data-tip="Distribuição sugerida pela análise para R$ 100 mil. Os pesos somam 100% e o valor em reais é o peso aplicado ao capital.">💰 Carteira ideal (R$ 100 mil) <span class="i">ⓘ</span></h2><div id="al"></div></div>
+<div class="cd"><h2 data-tip="Quanto da carteira está em cada nível de prioridade (esquerda) e em cada faixa de risco (direita).">🧩 Peso por nível e risco <span class="i">ⓘ</span></h2><div id="dn"></div></div>
+<div class="cd"><h2 data-tip="Soma dos pesos da carteira ideal por setor. Mostra onde a carteira está concentrada.">🏭 Peso por setor <span class="i">ⓘ</span></h2><div id="sw"></div></div>
+</div>
+<div class="cd" style="margin-top:12px"><h2 data-tip="Compara o preço atual com a faixa de compra ideal e o FV base de cada ativo. Cada linha tem a sua própria escala.">📍 Preço atual vs. zonas de compra <span class="i">ⓘ</span></h2><div class="sub" style="margin-bottom:6px">Cada barra: faixa ideal (verde) · marcador = preço atual · escala normalizada por ativo</div><div id="zn"></div></div>
+<div class="cd" style="margin-top:12px"><h2>🗓️ Calendário de balanços 3T26</h2><div class="tl" id="cl"></div>
+<div class="sub" style="margin-top:8px">⚠️ A análise cita o 3T26 de MOVI3 como já divulgado, mas o calendário lista 11/11 — confirme a data. Sem data na análise: SMAL11 (ETF), BBDC4, VLID3, MOTV3, HYPE3.</div></div>
+<div class="cd" style="margin-top:12px"><h2>🧭 Conclusões</h2><div class="dg" id="cn"></div></div>
+<div class="cd" id="uni" style="margin-top:12px"><h2 data-tip="Todos os ativos monitorados (ações brasileiras e SMAL11) com setor e preço de referência de 30/10/2026. Os marcados com a estrela já têm análise fundamentalista. O preço atual vem da atualização diária das 19h.">🌐 Universo monitorado <span class="i">ⓘ</span></h2><div class="f"><input id="uf" placeholder="Buscar ticker" style="width:150px"><select id="us"></select><label style="flex-direction:row;align-items:center;gap:6px"><input id="uo" type="checkbox" style="width:auto"> só analisados</label></div><div class="sub" id="uc" style="margin-bottom:6px"></div><div class="sc"><table id="ut"><thead><tr><th>Ativo</th><th>Setor</th><th>Preço ref. 30/10</th><th>Preço atual</th><th>Variação</th></tr></thead><tbody id="ub"></tbody></table></div></div>
+<div class="ft">Material de estudo baseado em análise fundamentalista e em estimativas. Não constitui recomendação de investimento, oferta ou consultoria. Preços e valores justos são de referência e podem estar desatualizados; rentabilidade passada não garante resultado futuro. Decida com base na sua própria análise. Caixa sugerido: 20–25% até o fim da temporada de resultados (3 a 12/11).</div>
+</div><div id="tip"></div><script>
+(async()=>{let PX={},PD="30/10/2026";try{const j=await (await fetch("prices.json?"+Date.now())).json();PX=j.prices||{};PD=j.date||PD}catch(e){}
+let UN=null;try{UN=await (await fetch("universo.json?"+Date.now())).json()}catch(e){}
+const SE={VIVA3:"Varejo (joias)",DIRR3:"Construção civil",MDNE3:"Construção civil",MOVI3:"Aluguel de veículos",CYRE3:"Construção civil",RIAA3:"Varejo (moda)",EZTC3:"Construção civil",JHSF3:"Incorporação e shoppings",ALOS3:"Shoppings",TOTS3:"Software",ASAI3:"Varejo alimentar",BBAS3:"Bancos",SMAL11:"ETF small caps",RAIL3:"Logística",LEVE3:"Autopeças",BBDC4:"Bancos",VLID3:"Serviços",MOTV3:"Concessões",RENT3:"Aluguel de veículos",HYPE3:"Farmacêutico"};
+let AN=null;try{AN=await (await fetch("analises.json?"+Date.now())).json()}catch(e){}
+const SU={},rf={};if(UN&&UN.ativos)UN.ativos.forEach(a=>{SU[a.ticker]=a.setor;rf[a.ticker]=a.preco_ref_30_10});
+const RM={"Baixo":1,"Baixo/médio":1.5,"Médio":2,"Médio/alto":2.5,"Alto":3};
+const toRow=a=>[a.ticker,PX[a.ticker]||rf[a.ticker]||0,a.compra.agressiva_ate,a.compra.ideal_de,a.compra.ideal_ate,a.valor_justo.base,RM[a.risco]||2,a.nivel||3,a.peso||0,a.data_balanco||"—",a.plano||a.tese||""];
+let RAW=[
+["VIVA3",17.35,18,18,20,33.5,2.5,1,9,"05/11","50% agora · 25% após resultado bom · 25% em queda/pânico sem deterioração da tese"],
+["DIRR3",8.23,8.5,8.5,10,15.75,2,1,8,"09/11","50% agora · 25% se cair a R$7,50–8,00 · 25% após resultado. Se bom e abaixo de R$9: aumentar"],
+["MDNE3",15.53,16,16,18,28.5,2,1,8,"05/11","60% agora · 20% abaixo de R$15 · 20% após resultado"],
+["MOVI3",5.87,6,6,7,10,3,1,7,"11/11","70% agora · 30% em correção. 3T26 citado como já divulgado, com melhora operacional"],
+["CYRE3",17.37,18,18,20,29,2,1,7,"12/11","50% agora · 25% a R$16–17 · 25% após 3T26"],
+["RIAA3",6.10,6,6,7,9.75,2.5,2,4,"09/11","P/L 2x enganoso: lucro extraordinário do Midway. Mesmo normalizada, vê valor"],
+["EZTC3",9.13,9,9,10,14.5,2,2,4,"05/11","Tese patrimonial, P/VP 0,48x. Menos crescimento operacional que DIRR3/MDNE3"],
+["JHSF3",8.70,8,8,9.5,13.5,2.5,2,4,"12/11","Desconto e posição financeira boas; lucro contábil precisa ser normalizado"],
+["ALOS3",23.55,23,23,26,33.5,1.5,2,6,"05/11","Qualidade + geração de caixa + valuation + dividendos; equilibra as posições agressivas"],
+["TOTS3",33.23,34,34,37,47,1.5,2,6,"04/11","Contraponto de qualidade; menos dependente de reprecificação de ativos"],
+["ASAI3",7.81,7.5,7.5,8.5,11,3,3,5,"05/11","Aposta de recuperação: 40% agora · 60% depois. Depende de margem, vendas e desalavancagem"],
+["BBAS3",16.46,16.5,16.5,18,22.5,2.5,3,6,"11/11","P/L 6,13x · P/VP 0,51x. Risco político e de crédito. 50% agora · 50% após resultado; se cair a R$14–15, muito interessante"],
+["SMAL11",92.5,90,90,100,125,2,3,6,"—","Diversificação via índice"],
+["RAIL3",14.24,14,14,15.5,19,2,3,4,"11/11",""],
+["LEVE3",30.35,29,29,32,40,2,3,3,"11/11",""],
+["BBDC4",14.16,13.5,13.5,15,18.5,2,3,4,"—",""],
+["VLID3",14.20,13.5,13.5,15,18.5,1.5,3,3,"—",""],
+["MOTV3",14.22,14,14,15.5,18,2,3,2,"—",""],
+["RENT3",29.03,28,28,30,36.5,2,3,3,"05/11",""],
+["HYPE3",21.52,21,21,23,27,2,3,1,"—",""]
+];
+if(AN&&AN.ativos&&AN.ativos.length)RAW=AN.ativos.filter(a=>a.valor_justo&&a.valor_justo.base>0&&a.compra&&a.compra.ideal_ate>0&&(PX[a.ticker]||rf[a.ticker])>0).map(toRow);
+const D=RAW.map(a=>({t:a[0],p:PX[a[0]]||a[1],ag:a[2],lo:a[3],hi:a[4],fv:a[5],rk:a[6],tr:a[7],w:a[8],dt:a[9],pl:a[10],up:(a[5]/(PX[a[0]]||a[1])-1)*100,s:(SU[a[0]]||SE[a[0]]||"—")}));
+const RL={1.5:"Baixo/médio",2:"Médio",2.5:"Médio/alto",3:"Alto"},TC={1:"var(--t1)",2:"var(--t2)",3:"var(--t3)"};
+const f1=x=>x.toFixed(1).replace(".",","),f2=x=>x.toFixed(2).replace(".",",");
+const zone=d=>d.p<=d.ag?["Agressiva","z1"]:d.p<=d.hi?["Ideal","z2"]:["Acima","z3"];
+const $=s=>document.querySelector(s);
+let sk="up",sd=-1,flt="all",open=null,sec="all";
+const TP={"#":"Posição no ranking conforme a ordenação atual da tabela.","t":"Ticker e nível de prioridade: N1 são as 5 principais, N2 as 5 seguintes e N3 as demais.","p":"Cotação de referência na data indicada no topo da página. Não é cotação ao vivo.","ag":"Preço máximo para compra agressiva. Até esse valor, a análise aceita entrar sem esperar o balanço.","lo":"Faixa de preço considerada ideal para comprar, sem pressa e sem exagero.","fv":"Valor justo no cenário base da análise. É uma estimativa, não um preço-alvo garantido.","up":"Quanto o preço precisa subir para chegar ao FV base: FV base ÷ preço − 1.","rk":"Risco qualitativo da análise (execução, dívida, resultado, política), de baixo/médio a alto.","w":"Percentual sugerido na carteira ideal hipotética de R$ 100 mil.","dt":"Data de divulgação do balanço do 3T26. Traço: sem data na análise.","z":"Agressiva: preço ≤ limite agressivo. Ideal: dentro da faixa ideal. Acima: acima do teto da faixa."};
+TP.s="Setor de atuação da empresa.";
+const KT={"Ativos":"Quantidade de ativos na matriz de oportunidades.","Upside médio simples":"Média do upside dos 20 ativos, todos com o mesmo peso.","Upside ponderado":"Upside médio ponderado pelos pesos da carteira ideal. Reflete melhor o retorno potencial da carteira.","Maior upside":"Ativo com maior distância entre o preço e o FV base. Maior upside também costuma significar maior risco de execução.","Em zona agressiva":"Ativos cujo preço atual já está igual ou abaixo do limite de compra agressiva.","Balanços até 12/11":"Ativos da lista com resultado do 3T26 com data conhecida na análise.","Caixa sugerido":"Parte da carteira mantida em caixa para aproveitar quedas durante a temporada de balanços."};
+const tip=document.getElementById("tip");
+function showTip(el){const t=el.dataset.tip;if(!t)return;tip.textContent=t;tip.style.display="block";const r=el.getBoundingClientRect(),w=tip.offsetWidth;tip.style.left=Math.max(8,Math.min(r.left,innerWidth-w-8))+"px";tip.style.top=Math.min(r.bottom+6,innerHeight-tip.offsetHeight-8)+"px"}
+document.addEventListener("mouseover",e=>{const el=e.target.closest("[data-tip]");el?showTip(el):tip.style.display="none"});
+document.addEventListener("click",e=>{const el=e.target.closest("[data-tip]");if(!el){tip.style.display="none";return}if(e.target.closest(".i")||!el.matches("th")){e.stopPropagation();showTip(el)}},true);
+// KPIs
+const wu=D.reduce((s,d)=>s+d.w*d.up,0)/100,na=D.filter(d=>d.p<=d.ag).length,mx=[...D].sort((a,b)=>b.up-a.up)[0];
+const cal=D.filter(d=>d.dt!="—").length;
+$("#kp").innerHTML=[["Ativos",D.length],["Upside médio simples","+"+f1(D.reduce((s,d)=>s+d.up,0)/D.length)+"%"],["Upside ponderado","+"+f1(wu)+"%"],["Maior upside",mx.t+" +"+Math.round(mx.up)+"%"],["Em zona agressiva",na+" de "+D.length],["Balanços até 12/11",cal],["Caixa sugerido","20–25%"]].map(k=>`<div class="cd" data-tip="${KT[k[0]]||''}"><div class="kv">${k[1]}</div><div class="kl">${k[0]} <span class="i">ⓘ</span></div></div>`).join("");
+// Filters
+const FL=[["all","Todos"],["1","Nível 1"],["2","Nível 2"],["3","Nível 3"],["agr","Zona agressiva"],["hi","Risco alto"]];
+$("#fl").innerHTML=FL.map(x=>`<button data-f="${x[0]}" class="${x[0]=="all"?"on":""}">${x[1]}</button>`).join("");
+$("#fl").onclick=e=>{const b=e.target.closest("button");if(!b)return;flt=b.dataset.f;document.querySelectorAll("#fl button").forEach(x=>x.classList.toggle("on",x==b));tab()};
+const SC=[...new Set(D.map(d=>d.s))].sort();
+$("#sf").innerHTML='<option value="all">Todos os setores</option>'+SC.map(s=>`<option>${s}</option>`).join("");
+$("#sf").onchange=e=>{sec=e.target.value;tab()};
+const H=[["#",""],["t","Ativo"],["s","Setor"],["p","Preço"],["ag","Agress. ≤"],["lo","Ideal"],["fv","FV base"],["up","Upside"],["rk","Risco"],["w","Peso"],["dt","Balanço"],["z","Zona"]];
+function tab(){
+let r=[...D].sort((a,b)=>(sk=="t"||sk=="s")?sd*String(a[sk]).localeCompare(b[sk])*-1:sd*(a[sk]-b[sk]));
+r=r.filter(d=>(flt=="all"||flt==String(d.tr)||(flt=="agr"&&d.p<=d.ag)||(flt=="hi"&&d.rk>=2.5))&&(sec=="all"||d.s==sec));
+const m=Math.max(...D.map(d=>d.up));
+$("#tb").innerHTML="<thead><tr>"+H.map(h=>`<th data-k="${h[0]}" data-tip="${TP[h[0]]||''}">${h[1]}${h[0]==sk?(sd<0?" ▼":" ▲"):""} <span class="i">ⓘ</span></th>`).join("")+"</tr></thead><tbody>"+r.map((d,i)=>{const z=zone(d);return `<tr class="r" data-t="${d.t}"><td>${i+1}</td><td><b>${d.t}</b> <span class="tg" style="background:${TC[d.tr]}">N${d.tr}</span></td><td>${d.s}</td><td>${f2(d.p)}</td><td>${f2(d.ag)}</td><td>${d.lo}–${d.hi}</td><td>${f2(d.fv)}</td><td><span class="bar" style="width:${d.up/m*60}px"></span> <b>+${Math.round(d.up)}%</b></td><td>${RL[d.rk]}</td><td>${d.w}%</td><td>${d.dt}</td><td><span class="tg ${z[1]}">${z[0]}</span></td></tr>`+(open==d.t?`<tr class="dt"><td colspan="12"><b>Plano:</b> ${d.pl||"Sem plano detalhado na análise; posição menor, entrada após resultados."}<br><b>Alvo:</b> R$ ${f2(d.fv)} (${f1(d.up)}%) · <b>Distância até a zona ideal:</b> ${d.p<=d.hi?"dentro/abaixo":"+"+f1((d.p/d.hi-1)*100)+"% acima do teto"}</td></tr>`:"")}).join("")+"</tbody>"}
+$("#tb").onclick=e=>{const th=e.target.closest("th"),tr=e.target.closest("tr.r");
+if(th&&th.dataset.k&&th.dataset.k!="#"&&th.dataset.k!="z"&&th.dataset.k!="dt"){const k=th.dataset.k;sd=k==sk?-sd:-1;sk=k;tab()}
+else if(tr){open=open==tr.dataset.t?null:tr.dataset.t;tab()}};
+tab();
+// Upside bars
+const S=[...D].sort((a,b)=>b.up-a.up),M=Math.max(...D.map(d=>d.up));
+$("#up").innerHTML=`<svg viewBox="0 0 420 ${S.length*20+6}">`+S.map((d,i)=>`<text x="0" y="${i*20+14}">${d.t}</text><rect x="52" y="${i*20+3}" width="${d.up/M*300}" height="13" rx="3" fill="${TC[d.tr]}"/><text x="${58+d.up/M*300}" y="${i*20+14}">+${Math.round(d.up)}%</text>`).join("")+"</svg>";
+// Scatter
+const RK=[1.5,2,2.5,3],cnt={};
+$("#sx").innerHTML=`<svg viewBox="0 0 420 300"><line x1="40" y1="260" x2="410" y2="260" stroke="var(--bd)"/><line x1="40" y1="10" x2="40" y2="260" stroke="var(--bd)"/>`+[0,25,50,75,100].map(v=>`<text x="4" y="${264-v*2.4}">${v}%</text><line x1="40" x2="410" y1="${260-v*2.4}" y2="${260-v*2.4}" stroke="var(--bd)" stroke-dasharray="2 4"/>`).join("")+RK.map((r,i)=>`<text x="${55+i*92}" y="278">${RL[r]}</text>`).join("")+D.map(d=>{const i=RK.indexOf(d.rk);cnt[i]=(cnt[i]||0)+1;const x=70+i*92+((cnt[i]%3)-1)*26,y=260-d.up*2.4;return `<circle cx="${x}" cy="${y}" r="${4+d.w/2}" fill="${TC[d.tr]}" opacity=".8"/><text x="${x+6}" y="${y-6}" style="fill:var(--tx);font-size:10px">${d.t}</text>`}).join("")+`</svg><div class="sub">Tamanho do ponto = peso na carteira</div>`;
+// Allocation
+const A=[...D].sort((a,b)=>b.w-a.w);
+$("#al").innerHTML=A.map(d=>`<div style="display:flex;align-items:center;gap:8px;margin:3px 0"><span style="width:56px"><b>${d.t}</b></span><span class="bar" style="background:${TC[d.tr]};width:${d.w*20}px"></span><span class="sub">${d.w}% · R$ ${(d.w*1000).toLocaleString("pt-BR")}</span></div>`).join("");
+// Donuts
+function dn(items,cx){let a=-Math.PI/2,o="";const R=50,C=2*Math.PI*R;let off=0;items.forEach(it=>{const l=it[1]/100*C;o+=`<circle cx="${cx}" cy="70" r="${R}" fill="none" stroke="${it[2]}" stroke-width="22" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-off}" transform="rotate(-90 ${cx} 70)"/>`;off+=l});return o}
+const tw=[1,2,3].map(t=>D.filter(d=>d.tr==t).reduce((s,d)=>s+d.w,0));
+const rw={};D.forEach(d=>{const k=d.rk<=2?"Baixo/médio–Médio":d.rk==2.5?"Médio/alto":"Alto";rw[k]=(rw[k]||0)+d.w});
+const rc={"Baixo/médio–Médio":"var(--gr)","Médio/alto":"var(--am)","Alto":"var(--rd)"};
+$("#dn").innerHTML=`<svg viewBox="0 0 420 150">`+dn(tw.map((v,i)=>["N"+(i+1),v,TC[i+1]]),80)+dn(Object.entries(rw).map(e=>[e[0],e[1],rc[e[0]]]),300)+`<text x="80" y="74" text-anchor="middle" style="fill:var(--tx);font-size:12px">Nível</text><text x="300" y="74" text-anchor="middle" style="fill:var(--tx);font-size:12px">Risco</text></svg><div class="lg">`+tw.map((v,i)=>`<span><i style="background:${TC[i+1]}"></i>N${i+1}: ${v}%</span>`).join("")+Object.entries(rw).map(e=>`<span><i style="background:${rc[e[0]]}"></i>${e[0]}: ${e[1]}%</span>`).join("")+"</div>";
+$("#pd").textContent=PD;
+const sw={};D.forEach(d=>sw[d.s]=(sw[d.s]||0)+d.w);
+$("#sw").innerHTML=Object.entries(sw).sort((a,b)=>b[1]-a[1]).map(e=>`<div style="display:flex;align-items:center;gap:8px;margin:3px 0"><span style="min-width:150px">${e[0]}</span><span class="bar" style="background:var(--ac);width:${e[1]*8}px"></span><span class="sub">${e[1]}%</span></div>`).join("");
+const R=v=>"R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+let sel=new Set(D.map(d=>d.t));
+function sim(){const cap=Math.max(0,+$("#cap").value||0),cx=Math.min(90,Math.max(0,+$("#cx").value||0)),inv=cap*(1-cx/100),L=D.filter(d=>sel.has(d.t)).sort((a,b)=>b.w-a.w),tw=L.reduce((s,d)=>s+d.w,0)||1;let used=0;
+$("#chips").innerHTML=[...D].sort((a,b)=>b.w-a.w).map(d=>`<button data-c="${d.t}" class="${sel.has(d.t)?"on":""}">${d.t}</button>`).join("");
+const rows=L.map(d=>{const v=inv*d.w/tw,q=Math.floor(v/d.p),c=q*d.p;used+=c;return `<tr><td><b>${d.t}</b></td><td>${d.w}%</td><td>${f1(d.w/tw*100)}%</td><td>${R(v)}</td><td>${f2(d.p)}</td><td>${q}</td><td>${R(c)}</td></tr>`}).join("");
+$("#sm").innerHTML="<thead><tr><th>Ativo</th><th>Peso base</th><th>Peso ajustado</th><th>Alvo (R$)</th><th>Preço</th><th>Cotas</th><th>Custo real</th></tr></thead><tbody>"+rows+"</tbody>";
+$("#sn").textContent=L.length?`${L.length} ativos · investido ${R(used)} · caixa total ${R(cap-used)} (reserva de ${cx}% + sobra de arredondamento)`:"Selecione ao menos um ativo."}
+$("#cap").oninput=$("#cx").oninput=sim;
+$("#nn").oninput=e=>{const n=Math.min(D.length,Math.max(1,+e.target.value||1));sel=new Set([...D].sort((a,b)=>b.w-a.w).slice(0,n).map(d=>d.t));sim()};
+$("#chips").onclick=e=>{const b=e.target.closest("button");if(!b)return;const t=b.dataset.c;sel.has(t)?sel.delete(t):sel.add(t);$("#nn").value=sel.size;sim()};
+sim();
+// Zones
+$("#zn").innerHTML=S.map(d=>{const lo=Math.min(d.p,d.lo)*.85,hi=d.fv*1.02,sc=v=>(v-lo)/(hi-lo)*100,z=zone(d);return `<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><b style="width:56px">${d.t}</b><div style="position:relative;flex:1;height:14px;background:var(--bd);border-radius:7px"><div style="position:absolute;left:${sc(d.lo)}%;width:${sc(d.hi)-sc(d.lo)}%;height:100%;background:var(--gr);opacity:.55;border-radius:7px"></div><div style="position:absolute;left:${sc(d.fv)}%;top:-2px;height:18px;width:3px;background:var(--ac)"></div><div style="position:absolute;left:calc(${sc(d.p)}% - 6px);top:0;width:14px;height:14px;border-radius:50%;background:var(--tx);border:2px solid var(--card)"></div></div><span class="tg ${z[1]}" style="width:74px;text-align:center">${z[0]}</span></div>`}).join("")+`<div class="sub">● preço atual · faixa verde = compra ideal · barra azul = FV base</div>`;
+// Calendar
+const cm={};D.forEach(d=>{if(d.dt!="—")(cm[d.dt]=cm[d.dt]||[]).push(d)});
+const ex={"03/11":["ITUB4","BBSE3"],"09/11":["ITSA4"],"10/11":["PETR4","BPAC11","IGTI11"],"12/11":["B3SA3","CPFE3","TAEE11"],"05/11":["PSSA3"]};
+$("#cl").innerHTML=["03/11","04/11","05/11","09/11","10/11","11/11","12/11"].map(k=>`<div><b>${k}</b>${(cm[k]||[]).map(d=>`<span style="color:${TC[d.tr]};font-weight:600">${d.t}</span>`).join(" ")}<div class="sub">${(ex[k]||[]).join(" ")}</div></div>`).join("");
+// Conclusions
+$("#cn").innerHTML=[["🏆 Melhor assimetria","VIVA3 / DIRR3 / MDNE3"],["⚖️ Assimetria + qualidade","CYRE3 / TOTS3 / ALOS3"],["✅ Já com resultado","MOVI3"],["🏦 Large cap deep value","BBAS3"],["🧺 Diversificação","SMAL11"],["🛒 Recuperação consumo","ASAI3"],["🏗️ Desconto patrimonial","EZTC3 / JHSF3"],["🎯 Preços de ataque","MDNE3 R$15–16 · DIRR3 R$7–8 · VIVA3 R$16–17 · CYRE3 R$15–17 · MOVI3 R$5–5,50"]].map(c=>`<div class="cd"><div class="kl">${c[0]}</div><b>${c[1]}</b></div>`).join("");
+$("#th").onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).colorScheme=="dark";r.dataset.theme=d?"light":"dark"};
+if(UN&&UN.ativos){
+const own=new Set(D.map(d=>d.t)),pr=Object.assign({},PX);D.forEach(d=>pr[d.t]=d.p);
+const sts=[...new Set(UN.ativos.map(a=>a.setor))].sort();
+$("#us").innerHTML='<option value="all">Todos os setores</option>'+sts.map(x=>`<option>${x}</option>`).join("");
+let uq="",ug="all",uo=false;
+function ut(){const r=UN.ativos.filter(a=>(ug=="all"||a.setor==ug)&&(!uo||own.has(a.ticker))&&a.ticker.includes(uq));
+$("#ub").innerHTML=r.map(a=>{const p=pr[a.ticker],ref=a.preco_ref_30_10,v=p&&ref?(p/ref-1)*100:null;return `<tr><td><b>${a.ticker}</b>${own.has(a.ticker)?' <span class="tg z1">★</span>':''}</td><td>${a.setor}</td><td>${ref==null?"—":f2(ref)}</td><td>${p?f2(p):"—"}</td><td>${v==null?"—":(v>=0?"+":"")+f1(v)+"%"}</td></tr>`}).join("");
+$("#uc").textContent=r.length+" de "+UN.ativos.length+" ativos"}
+$("#uf").oninput=e=>{uq=e.target.value.toUpperCase().trim();ut()};
+$("#us").onchange=e=>{ug=e.target.value;ut()};
+$("#uo").onchange=e=>{uo=e.target.checked;ut()};
+ut()}else{$("#uni").style.display="none"}
+})();</script></body></html>

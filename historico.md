@@ -2,6 +2,13 @@
 
 Cada mudança relevante vira uma versão numerada. Para desfazer, volte ao arquivo da versão anterior.
 
+## v006 — política de valuation, critério nos balões/detalhes e nível automático
+- Nova política de múltiplos por setor (politica-valuation.md e politica.json). Múltiplos e faixas são propostas de Jota para teste.
+- A página mostra o critério de cada valor justo (balão ⓘ na coluna FV base e conta completa ao clicar na linha), o marcador ⚑ para desvios aprovados e o selo IA nos ativos com insumos não auditados.
+- O nível (N1 a N3) passou a ser calculado pela página a partir do upside e do risco, com a regra no balão.
+- Entram CURY3, TEND3 e ITUB4, avaliados pela política (insumos do ChatGPT, não auditados). Os 20 originais mantêm o valor original; VIVA3 e DIRR3 mostram o comparativo pela política.
+- Arquivos: index.html, analises.json, politica.json, politica-valuation.md. Para voltar: index-v005.html e o histórico do analises.json no GitHub.
+
 ## v005 — cotações dos 151 e página lendo analises.json
 - A rotina das 19h passa a ler os tickers do universo.json e atualiza os 151 (brapi, 1 por vez, com tentativa dupla).
 - A página passa a montar o ranking a partir do analises.json (os 20 iniciais) e a mostrar o preço atual de todos os ativos do universo. Se o analises.json faltar, usa os 20 embutidos no código.

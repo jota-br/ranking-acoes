@@ -1,6 +1,6 @@
 {
- "versao": "v005",
- "data_atualizacao": "30/10/2026",
+ "versao": "v006",
+ "data_atualizacao": "04/11/2026",
  "ativos": [
   {
    "ticker": "VIVA3",
@@ -21,7 +21,16 @@
    "plano": "50% agora · 25% após resultado bom · 25% em queda/pânico sem deterioração da tese",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original (30/10/2026). Pela política: P/L 9x x LPA R$ 2,49 = R$ 22,42.",
+   "comparativo_politica": {
+    "base": 22.42,
+    "pessimista": 14.95,
+    "otimista": 29.9
+   },
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado. Comparativo pela política (P/L 7/10/13x, ajuste de risco -1x por risco Médio/alto): lucro recorrente de 12 meses R$ 585,80 mi ÷ 235,14 mi de ações = LPA R$ 2,49; x 9x = R$ 22,42 (pessimista 14,95; otimista 29,90). Insumos informados pelo ChatGPT, não auditados."
   },
   {
    "ticker": "DIRR3",
@@ -42,7 +51,16 @@
    "plano": "50% agora · 25% se cair a R$7,50–8,00 · 25% após resultado. Se bom e abaixo de R$9: aumentar",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original (30/10/2026). Pela política: P/L 8,5x x LPA R$ 1,65 = R$ 14,01.",
+   "comparativo_politica": {
+    "base": 14.01,
+    "pessimista": 9.89,
+    "otimista": 18.12
+   },
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado. Comparativo pela política (P/L 6/8,5/11x, ajuste de risco +0x por risco Médio): lucro recorrente de 12 meses R$ 856,00 mi ÷ 519,51 mi de ações = LPA R$ 1,65; x 8,5x = R$ 14,01 (pessimista 9,89; otimista 18,12). Insumos informados pelo ChatGPT, não auditados."
   },
   {
    "ticker": "MDNE3",
@@ -63,7 +81,11 @@
    "plano": "60% agora · 20% abaixo de R$15 · 20% após resultado",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "MOVI3",
@@ -84,7 +106,11 @@
    "plano": "70% agora · 30% em correção. 3T26 citado como já divulgado, com melhora operacional",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "CYRE3",
@@ -105,7 +131,11 @@
    "plano": "50% agora · 25% a R$16–17 · 25% após 3T26",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "RIAA3",
@@ -126,7 +156,11 @@
    "plano": "P/L 2x enganoso: lucro extraordinário do Midway. Mesmo normalizada, vê valor",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "EZTC3",
@@ -147,7 +181,11 @@
    "plano": "Tese patrimonial, P/VP 0,48x. Menos crescimento operacional que DIRR3/MDNE3",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "JHSF3",
@@ -168,7 +206,11 @@
    "plano": "Desconto e posição financeira boas; lucro contábil precisa ser normalizado",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "ALOS3",
@@ -189,7 +231,11 @@
    "plano": "Qualidade + geração de caixa + valuation + dividendos; equilibra as posições agressivas",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "TOTS3",
@@ -210,7 +256,11 @@
    "plano": "Contraponto de qualidade; menos dependente de reprecificação de ativos",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "ASAI3",
@@ -231,7 +281,11 @@
    "plano": "Aposta de recuperação: 40% agora · 60% depois. Depende de margem, vendas e desalavancagem",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "BBAS3",
@@ -252,7 +306,11 @@
    "plano": "P/L 6,13x · P/VP 0,51x. Risco político e de crédito. 50% agora · 50% após resultado; se cair a R$14–15, muito interessante",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "SMAL11",
@@ -273,7 +331,11 @@
    "plano": "Diversificação via índice",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "RAIL3",
@@ -294,7 +356,11 @@
    "plano": "",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "LEVE3",
@@ -315,7 +381,11 @@
    "plano": "",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "BBDC4",
@@ -336,7 +406,11 @@
    "plano": "",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "VLID3",
@@ -357,7 +431,11 @@
    "plano": "",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "MOTV3",
@@ -378,7 +456,11 @@
    "plano": "",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "RENT3",
@@ -399,7 +481,11 @@
    "plano": "",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
   },
   {
    "ticker": "HYPE3",
@@ -420,7 +506,108 @@
    "plano": "",
    "tese": "",
    "fonte": "Análise inicial (30/10/2026)",
-   "data_dos_dados": "30/10/2026"
+   "data_dos_dados": "30/10/2026",
+   "origem": "original",
+   "verificado": true,
+   "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
+  },
+  {
+   "ticker": "CURY3",
+   "valor_justo": {
+    "pessimista": 21.39,
+    "base": 30.3,
+    "otimista": 39.21
+   },
+   "compra": {
+    "agressiva_ate": 18.18,
+    "ideal_de": 18.18,
+    "ideal_ate": 21.21
+   },
+   "risco": "Médio",
+   "nivel": null,
+   "peso": 0,
+   "data_balanco": "10/11",
+   "plano": "",
+   "tese": "Elevada rentabilidade operacional com margens robustas e geração recorrente de caixa. Normalização parcial do ROE no múltiplo.",
+   "principais_riscos": [
+    "Juros elevados",
+    "concentração geográfica",
+    "concentração no MCMV",
+    "custos de construção",
+    "redução de margens"
+   ],
+   "fonte": "Release 2T26 DRE e histórico 3T25-2T26 | FRE 2026 composição acionária | RI calendário",
+   "data_dos_dados": "30/06/2026",
+   "origem": "politica",
+   "verificado": false,
+   "criterio_curto": "P/L 8,5x x LPA R$ 3,56 = R$ 30,30.",
+   "criterio_detalhe": "Método: P/L sobre o lucro recorrente de 12 meses. Conta: R$ 1.098,00 mi ÷ 308,05 mi de ações = LPA R$ 3,56; x 8,5x = R$ 30,30. Cenários: 6x / 8,5x / 11x (política da família Construção civil, 6/8,5/11x, com ajuste de +0x por risco Médio). Insumos informados pelo ChatGPT, não auditados. Fonte: Release 2T26 DRE e histórico 3T25-2T26 | FRE 2026 composição acionária | RI calendário. Dados de 30/06/2026."
+  },
+  {
+   "ticker": "TEND3",
+   "valor_justo": {
+    "pessimista": 21.7,
+    "base": 32.55,
+    "otimista": 43.41
+   },
+   "compra": {
+    "agressiva_ate": 17.91,
+    "ideal_de": 17.91,
+    "ideal_ate": 21.16
+   },
+   "risco": "Médio/alto",
+   "nivel": null,
+   "peso": 0,
+   "data_balanco": "04/11",
+   "plano": "",
+   "tese": "Recuperação operacional com avanço das margens. O balanço do 3T26 sai em 04/11 e não está incorporado.",
+   "principais_riscos": [
+    "Endividamento",
+    "consumo de caixa",
+    "dependência do MCMV",
+    "distratos",
+    "custos de construção",
+    "risco de execução"
+   ],
+   "fonte": "ITR 2T26 lucro UDM ex-swap | Release 1T26 e 2T26 | Prévia operacional 3T26 | FRE 2026",
+   "data_dos_dados": "30/06/2026",
+   "origem": "politica",
+   "verificado": false,
+   "criterio_curto": "P/L 7,5x x LPA R$ 4,34 = R$ 32,55.",
+   "criterio_detalhe": "Método: P/L sobre o lucro recorrente de 12 meses. Conta: R$ 532,00 mi ÷ 122,56 mi de ações = LPA R$ 4,34; x 7,5x = R$ 32,55. Cenários: 5x / 7,5x / 10x (política da família Construção civil, 6/8,5/11x, com ajuste de -1x por risco Médio/alto). Insumos informados pelo ChatGPT, não auditados. Fonte: ITR 2T26 lucro UDM ex-swap | Release 1T26 e 2T26 | Prévia operacional 3T26 | FRE 2026. Dados de 30/06/2026. Balanço do 3T26 ainda não incorporado."
+  },
+  {
+   "ticker": "ITUB4",
+   "valor_justo": {
+    "pessimista": 25.94,
+    "base": 35.47,
+    "otimista": 39.9
+   },
+   "compra": {
+    "agressiva_ate": 24.83,
+    "ideal_de": 24.83,
+    "ideal_ate": 28.37
+   },
+   "risco": "Baixo/médio",
+   "nivel": null,
+   "peso": 0,
+   "data_balanco": "—",
+   "plano": "",
+   "tese": "Banco com ROE recorrente de 23,6% e elevada capacidade de geração de resultados.",
+   "principais_riscos": [
+    "Deterioração da carteira de crédito",
+    "aumento da inadimplência",
+    "pressão sobre margem financeira",
+    "risco macroeconômico",
+    "mudanças regulatórias"
+   ],
+   "fonte": "Kit do Investidor 3T26 PL controlador | Análise Gerencial 3T26 ROE | Composição acionária 19/05/2026",
+   "data_dos_dados": "30/09/2026",
+   "origem": "politica",
+   "verificado": false,
+   "criterio_curto": "P/VP por Gordon: 1,78x x VPA R$ 19,95 = R$ 35,47.",
+   "criterio_detalhe": "Método: P/VP por Gordon. VPA = patrimônio líquido R$ 219.894,00 mi ÷ 11.021,79 mi de ações = R$ 19,95. P/VP justo = (ROE sustentável − g) ÷ (Ke − g), com Ke 15%: pessimista (18%; 5%) 1,30x; base (22%; 6%) 1,78x; otimista (23%; 7%) 2,00x. Valor justo base = 19,95 x 1,78x = R$ 35,47. Insumos informados pelo ChatGPT, não auditados. Fonte: Kit do Investidor 3T26 PL controlador | Análise Gerencial 3T26 ROE | Composição acionária 19/05/2026. Dados de 30/09/2026."
   }
  ]
 }

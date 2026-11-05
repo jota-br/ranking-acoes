@@ -59,7 +59,7 @@ const SE={VIVA3:"Varejo (joias)",DIRR3:"Construção civil",MDNE3:"Construção 
 let AN=null;try{AN=await (await fetch("analises.json?"+Date.now())).json()}catch(e){}
 const SU={},rf={};if(UN&&UN.ativos)UN.ativos.forEach(a=>{SU[a.ticker]=a.setor;rf[a.ticker]=a.preco_ref_30_10});
 const RM={"Baixo":1,"Baixo/médio":1.5,"Médio":2,"Médio/alto":2.5,"Alto":3};
-const toRow=a=>[a.ticker,PX[a.ticker]||rf[a.ticker]||0,a.compra.agressiva_ate,a.compra.ideal_de,a.compra.ideal_ate,a.valor_justo.base,RM[a.risco]||2,a.nivel||3,a.peso||0,a.data_balanco||"—",a.plano||a.tese||""];
+const toRow=a=>[a.ticker,PX[a.ticker]||rf[a.ticker]||0,a.compra.agressiva_ate,a.compra.ideal_de,a.compra.ideal_ate,a.valor_justo.base,RM[a.risco]||2,a.nivel||3,a.peso||0,a.data_balanco||"—",a.plano||a.tese||"",{cc:a.criterio_curto||"",cd:a.criterio_detalhe||"",ds:a.desvio||"",nv:a.verificado===false,og:a.origem||""}];
 let RAW=[
 ["VIVA3",17.35,18,18,20,33.5,2.5,1,9,"05/11","50% agora · 25% após resultado bom · 25% em queda/pânico sem deterioração da tese"],
 ["DIRR3",8.23,8.5,8.5,10,15.75,2,1,8,"09/11","50% agora · 25% se cair a R$7,50–8,00 · 25% após resultado. Se bom e abaixo de R$9: aumentar"],
@@ -83,7 +83,9 @@ let RAW=[
 ["HYPE3",21.52,21,21,23,27,2,3,1,"—",""]
 ];
 if(AN&&AN.ativos&&AN.ativos.length)RAW=AN.ativos.filter(a=>a.valor_justo&&a.valor_justo.base>0&&a.compra&&a.compra.ideal_ate>0&&(PX[a.ticker]||rf[a.ticker])>0).map(toRow);
-const D=RAW.map(a=>({t:a[0],p:PX[a[0]]||a[1],ag:a[2],lo:a[3],hi:a[4],fv:a[5],rk:a[6],tr:a[7],w:a[8],dt:a[9],pl:a[10],up:(a[5]/(PX[a[0]]||a[1])-1)*100,s:(SU[a[0]]||SE[a[0]]||"—")}));
+const D=RAW.map(a=>({t:a[0],p:PX[a[0]]||a[1],ag:a[2],lo:a[3],hi:a[4],fv:a[5],rk:a[6],tr:a[7],w:a[8],dt:a[9],pl:a[10],up:(a[5]/(PX[a[0]]||a[1])-1)*100,s:(SU[a[0]]||SE[a[0]]||"—"),x:a[11]||{},n0:a[7]}));
+const RLn={1:"Baixo",1.5:"Baixo/médio",2:"Médio",2.5:"Médio/alto",3:"Alto"};
+D.forEach(d=>{const u=d.up,r=d.rk;d.tr=(r<=2&&u>=60)||(r<=1.5&&u>=40)?1:(u>=30&&r<=2.5?2:3);d.nt="Nível "+d.tr+": upside de "+Math.round(u)+"% e risco "+RLn[r]+". Regra: N1 = upside de 60% ou mais com risco até Médio, ou de 40% ou mais com risco até Baixo/médio; N2 = upside de 30% ou mais com risco até Médio/alto; N3 = os demais."+(d.n0&&d.n0!=d.tr&&d.x.og!="politica"?" Nível da análise original: N"+d.n0+".":"")});
 const RL={1.5:"Baixo/médio",2:"Médio",2.5:"Médio/alto",3:"Alto"},TC={1:"var(--t1)",2:"var(--t2)",3:"var(--t3)"};
 const f1=x=>x.toFixed(1).replace(".",","),f2=x=>x.toFixed(2).replace(".",",");
 const zone=d=>d.p<=d.ag?["Agressiva","z1"]:d.p<=d.hi?["Ideal","z2"]:["Acima","z3"];
@@ -112,7 +114,7 @@ function tab(){
 let r=[...D].sort((a,b)=>(sk=="t"||sk=="s")?sd*String(a[sk]).localeCompare(b[sk])*-1:sd*(a[sk]-b[sk]));
 r=r.filter(d=>(flt=="all"||flt==String(d.tr)||(flt=="agr"&&d.p<=d.ag)||(flt=="hi"&&d.rk>=2.5))&&(sec=="all"||d.s==sec));
 const m=Math.max(...D.map(d=>d.up));
-$("#tb").innerHTML="<thead><tr>"+H.map(h=>`<th data-k="${h[0]}" data-tip="${TP[h[0]]||''}">${h[1]}${h[0]==sk?(sd<0?" ▼":" ▲"):""} <span class="i">ⓘ</span></th>`).join("")+"</tr></thead><tbody>"+r.map((d,i)=>{const z=zone(d);return `<tr class="r" data-t="${d.t}"><td>${i+1}</td><td><b>${d.t}</b> <span class="tg" style="background:${TC[d.tr]}">N${d.tr}</span></td><td>${d.s}</td><td>${f2(d.p)}</td><td>${f2(d.ag)}</td><td>${d.lo}–${d.hi}</td><td>${f2(d.fv)}</td><td><span class="bar" style="width:${d.up/m*60}px"></span> <b>+${Math.round(d.up)}%</b></td><td>${RL[d.rk]}</td><td>${d.w}%</td><td>${d.dt}</td><td><span class="tg ${z[1]}">${z[0]}</span></td></tr>`+(open==d.t?`<tr class="dt"><td colspan="12"><b>Plano:</b> ${d.pl||"Sem plano detalhado na análise; posição menor, entrada após resultados."}<br><b>Alvo:</b> R$ ${f2(d.fv)} (${f1(d.up)}%) · <b>Distância até a zona ideal:</b> ${d.p<=d.hi?"dentro/abaixo":"+"+f1((d.p/d.hi-1)*100)+"% acima do teto"}</td></tr>`:"")}).join("")+"</tbody>"}
+$("#tb").innerHTML="<thead><tr>"+H.map(h=>`<th data-k="${h[0]}" data-tip="${TP[h[0]]||''}">${h[1]}${h[0]==sk?(sd<0?" ▼":" ▲"):""} <span class="i">ⓘ</span></th>`).join("")+"</tr></thead><tbody>"+r.map((d,i)=>{const z=zone(d);return `<tr class="r" data-t="${d.t}"><td>${i+1}</td><td><b>${d.t}</b> <span class="tg" data-tip="${d.nt}" style="background:${TC[d.tr]}">N${d.tr}</span></td><td>${d.s}</td><td>${f2(d.p)}</td><td>${f2(d.ag)}</td><td>${d.lo}–${d.hi}</td><td data-tip="${d.x.cc||""}">${f2(d.fv)} <span class="i">ⓘ</span>${d.x.ds?' <span class="i" style="color:var(--am)" data-tip="Desvio da política: '+d.x.ds+'">⚑</span>':''}${d.x.nv?' <span class="tg z3" data-tip="Insumos informados pelo ChatGPT e ainda não auditados">IA</span>':''}</td><td><span class="bar" style="width:${Math.max(0,d.up)/m*60}px"></span> <b>${d.up>=0?"+":""}${Math.round(d.up)}%</b></td><td>${RL[d.rk]}</td><td>${d.w}%</td><td>${d.dt}</td><td><span class="tg ${z[1]}">${z[0]}</span></td></tr>`+(open==d.t?`<tr class="dt"><td colspan="12"><b>Plano:</b> ${d.pl||"Sem plano detalhado na análise; posição menor, entrada após resultados."}<br><b>Critério do valor justo:</b> ${d.x.cd||"Análise original (30/10/2026); múltiplo não documentado."}<br><b>Alvo:</b> R$ ${f2(d.fv)} (${f1(d.up)}%) · <b>Distância até a zona ideal:</b> ${d.p<=d.hi?"dentro/abaixo":"+"+f1((d.p/d.hi-1)*100)+"% acima do teto"}</td></tr>`:"")}).join("")+"</tbody>"}
 $("#tb").onclick=e=>{const th=e.target.closest("th"),tr=e.target.closest("tr.r");
 if(th&&th.dataset.k&&th.dataset.k!="#"&&th.dataset.k!="z"&&th.dataset.k!="dt"){const k=th.dataset.k;sd=k==sk?-sd:-1;sk=k;tab()}
 else if(tr){open=open==tr.dataset.t?null:tr.dataset.t;tab()}};

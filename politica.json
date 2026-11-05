@@ -1,0 +1,320 @@
+{
+ "versao": "v006",
+ "status": "rascunho aprovado para teste por Jota em 04/11/2026",
+ "setores": {
+  "Construção civil": {
+   "metodo": "P/L",
+   "multiplos": [
+    6,
+    8.5,
+    11
+   ]
+  },
+  "Materiais de construção": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Shoppings e imóveis": {
+   "metodo": "P/L",
+   "multiplos": [
+    8,
+    11,
+    14
+   ]
+  },
+  "Bancos": {
+   "metodo": "GORDON",
+   "multiplos": null
+  },
+  "Holding financeira": {
+   "metodo": "GORDON",
+   "multiplos": null
+  },
+  "Seguros": {
+   "metodo": "P/L",
+   "multiplos": [
+    8,
+    11,
+    14
+   ]
+  },
+  "Mercado de capitais": {
+   "metodo": "P/L",
+   "multiplos": [
+    8,
+    11,
+    14
+   ]
+  },
+  "Energia elétrica": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Saneamento e resíduos": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Concessões": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Telecomunicações": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Siderurgia e metalurgia": {
+   "metodo": "P/L",
+   "multiplos": [
+    4,
+    6,
+    8
+   ]
+  },
+  "Mineração": {
+   "metodo": "P/L",
+   "multiplos": [
+    4,
+    6,
+    8
+   ]
+  },
+  "Papel e celulose": {
+   "metodo": "P/L",
+   "multiplos": [
+    4,
+    6,
+    8
+   ]
+  },
+  "Química e petroquímica": {
+   "metodo": "P/L",
+   "multiplos": [
+    4,
+    6,
+    8
+   ]
+  },
+  "Petróleo e gás": {
+   "metodo": "P/L",
+   "multiplos": [
+    4,
+    6,
+    8
+   ]
+  },
+  "Combustíveis e distribuição": {
+   "metodo": "P/L",
+   "multiplos": [
+    4,
+    6,
+    8
+   ]
+  },
+  "Agronegócio": {
+   "metodo": "P/L",
+   "multiplos": [
+    4,
+    6,
+    8
+   ]
+  },
+  "Varejo": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Varejo alimentar": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Calçados e vestuário": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Cosméticos": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Alimentos e bebidas": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Educação": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Serviços": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Farmácias": {
+   "metodo": "P/L",
+   "multiplos": [
+    12,
+    16,
+    20
+   ]
+  },
+  "Saúde": {
+   "metodo": "P/L",
+   "multiplos": [
+    12,
+    16,
+    20
+   ]
+  },
+  "Farmacêutico": {
+   "metodo": "P/L",
+   "multiplos": [
+    12,
+    16,
+    20
+   ]
+  },
+  "Tecnologia": {
+   "metodo": "P/L",
+   "multiplos": [
+    12,
+    18,
+    25
+   ]
+  },
+  "Bens de capital": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Autopeças": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Transporte e logística": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "Aluguel de veículos e equipamentos": {
+   "metodo": "P/L",
+   "multiplos": [
+    6,
+    9,
+    12
+   ]
+  },
+  "Aeroespacial e defesa": {
+   "metodo": "P/L",
+   "multiplos": [
+    7,
+    10,
+    13
+   ]
+  },
+  "ETF": {
+   "metodo": "SEM_VALOR_JUSTO",
+   "multiplos": null
+  }
+ },
+ "ajuste_risco_pontos": {
+  "Baixo": 1,
+  "Baixo/médio": 0,
+  "Médio": 0,
+  "Médio/alto": -1,
+  "Alto": -2
+ },
+ "faixas_compra_pct_do_valor_justo": {
+  "Baixo": {
+   "agressiva": 0.75,
+   "ideal_ate": 0.85
+  },
+  "Baixo/médio": {
+   "agressiva": 0.7,
+   "ideal_ate": 0.8
+  },
+  "Médio": {
+   "agressiva": 0.6,
+   "ideal_ate": 0.7
+  },
+  "Médio/alto": {
+   "agressiva": 0.55,
+   "ideal_ate": 0.65
+  },
+  "Alto": {
+   "agressiva": 0.5,
+   "ideal_ate": 0.6
+  }
+ },
+ "gordon": {
+  "ke": 0.15,
+  "pessimista": {
+   "roe": 0.18,
+   "g": 0.05
+  },
+  "base": {
+   "roe": 0.22,
+   "g": 0.06
+  },
+  "otimista": {
+   "roe": 0.23,
+   "g": 0.07
+  }
+ },
+ "desvio": "O ChatGPT pode sugerir ate 2 pontos de desvio no multiplo, com justificativa; so vale apos aprovacao de Jota.",
+ "nivel": "N1: upside>=60% e risco ate Medio, ou upside>=40% e risco ate Baixo/medio. N2: upside>=30% e risco ate Medio/alto. N3: demais."
+}
