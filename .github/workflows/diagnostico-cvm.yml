@@ -6,32 +6,35 @@ permissions:
 jobs:
   diagnostico:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Baixar e ler dados da CVM
         run: |
           python3 - <<'PY'
           import csv, io, json, os, re, sys, urllib.request, zipfile, datetime
+          from datetime import date, timedelta
           BASE = os.environ.get("CVM_BASE", "https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC")
-          REF = {"VIVA3": "lucro 12m ~585,8 mi", "DIRR3": "lucro 12m ~856,0 mi", "CURY3": "lucro 12m ~1098,0 mi", "ITUB4": "lucro 12m ~49623 mi; PL ~219894 mi"}
-          DEBUG = ["VIVA3", "ITUB4", "BBAS3"]
+          REF = {"VIVA3": "lucro 12m 585,84 mi; PL 3184 mi", "DIRR3": "lucro 12m ~856 mi", "CURY3": "lucro 12m ~1098 mi", "BBAS3": "P/L 7,68 e P/VP 0,51 (Investidor10)", "ITUB4": "P/L ~9,2-9,35; P/VP ~1,9-2,0", "TEND3": "LPA 4,72; acoes ~122,56 mi", "JALL3": "FY encerra em marco", "MOVI3": "conferir lucro", "VALE3": "demonstracoes em dolar"}
+          DEBUG = ["MOVI3", "KLBN11", "TEND3", "ASAI3"]
+          ALIAS = {"BPAC11": ["BTG PACTUAL"], "CMIN3": ["CSN MINERA"], "CSNA3": ["COMPANHIA SIDERURGICA NACIONAL", "COMPANHIA SIDERÚRGICA NACIONAL"], "MBRF3": ["MBRF"]}
           out = []
           def p(*a):
               s = " ".join(str(x) for x in a); print(s); out.append(s)
-          def baixar(url):
+          def baixar(url, silencioso=False):
               try:
                   req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
                   data = urllib.request.urlopen(req, timeout=300).read()
                   p("OK", url, f"{len(data)/1e6:.1f} MB"); return data
               except Exception as e:
-                  p("FALHOU", url, repr(e)[:160]); return None
+                  p("FALHOU" if not silencioso else "nao existe", url, repr(e)[:100]); return None
           def zip_de(prefixo, tipo, anos):
               for y in anos:
-                  d = baixar(f"{BASE}/{tipo}/DADOS/{prefixo}_{y}.zip")
+                  d = baixar(f"{BASE}/{tipo}/DADOS/{prefixo}_{y}.zip", silencioso=True)
                   if d: return y, zipfile.ZipFile(io.BytesIO(d))
               return None, None
           def rows(z, trecho):
+              if not z: return []
               nomes = [n for n in z.namelist() if trecho.lower() in n.lower()]
               if not nomes: return []
               rd = csv.DictReader(io.StringIO(z.read(nomes[0]).decode("latin-1")), delimiter=";")
@@ -48,26 +51,24 @@ jobs:
               try: return float(r["VL_CONTA"].replace(",", ".")) * esc(r) / 1e6
               except Exception: return None
           def nord(s): return (s or "").upper().replace("Ú", "U")
-          def melhor(rs, conta, ordem, ini=None, fim=None):
-              res = None
-              for r in rs:
-                  if r.get("CD_CONTA") != conta or nord(r.get("ORDEM_EXERC")) != ordem: continue
-                  if ini and r.get("DT_INI_EXERC") != ini: continue
-                  if fim and r.get("DT_FIM_EXERC") != fim: continue
-                  v = int(r.get("VERSAO") or 0)
-                  if res is None or v >= res[0]: res = (v, val(r))
-              return res[1] if res else None
+          def vers(r):
+              try: return int(r.get("VERSAO") or 0)
+              except ValueError: return 0
           def chave(cd): return [int(x) for x in cd.split(".") if x.isdigit()]
+          def d_(s): return datetime.date.fromisoformat(s)
+          def menos_ano(dt):
+              try: return dt.replace(year=dt.year - 1)
+              except ValueError: return dt.replace(year=dt.year - 1, day=28)
           def conta_lucro(rs):
               ds = {r["CD_CONTA"]: (r.get("DS_CONTA") or "").lower() for r in rs}
-              for cd in ("3.11", ):
-                  if cd in ds and ("lucro" in ds[cd] or "prejuízo" in ds[cd] or "prejuizo" in ds[cd]):
-                      ctrl = cd + ".01"
-                      return (ctrl if ctrl in ds and "controlador" in ds[ctrl] else cd), False
-              c = [cd for cd, d in ds.items() if cd.count(".") == 1 and ("lucro" in d or "prejuízo" in d or "prejuizo" in d) and ("período" in d or "periodo" in d or "líquido" in d or "liquido" in d)]
-              if not c: return None, False
-              cd = max(c, key=chave); ctrl = cd + ".01"
-              return (ctrl if ctrl in ds and "controlador" in ds[ctrl] else cd), True
+              if "3.11" in ds and any(k in ds["3.11"] for k in ("lucro", "prejuízo", "prejuizo")):
+                  cd = "3.11"; dyn = False
+              else:
+                  c = [x for x, d in ds.items() if x.count(".") == 1 and any(k in d for k in ("lucro", "prejuízo", "prejuizo")) and any(k in d for k in ("período", "periodo", "líquido", "liquido"))]
+                  if not c: return None, None, False
+                  cd = max(c, key=chave); dyn = True
+              ctrl = cd + ".01"
+              return (ctrl if ctrl in ds and "controlador" in ds[ctrl] else cd), cd, dyn
           def conta_pl(rs):
               ds = {r["CD_CONTA"]: (r.get("DS_CONTA") or "").lower() for r in rs}
               c = [cd for cd, d in ds.items() if cd.count(".") == 1 and "patrim" in d and ("líquido" in d or "liquido" in d)]
@@ -75,128 +76,154 @@ jobs:
               cd = max(c, key=chave)
               mino = next((x for x, d in ds.items() if x.startswith(cd + ".") and x.count(".") == 2 and ("controlador" in d and ("não" in d or "nao" in d) or "minorit" in d)), None)
               return cd, mino
-          def listar(rs, dt_ref=None, max_n=25):
+          def periodos(rs, conta):
+              per = {}
+              for r in rs:
+                  if r.get("CD_CONTA") != conta: continue
+                  o = 2 if nord(r.get("ORDEM_EXERC")) == "ULTIMO" else 1
+                  ini, fim = r.get("DT_INI_EXERC"), r.get("DT_FIM_EXERC")
+                  if not ini or not fim: continue
+                  k = (ini, fim); sc = (o, vers(r)); v = val(r)
+                  if v is None: continue
+                  if k not in per or sc >= per[k][0]: per[k] = (sc, v)
+              return {k: v[1] for k, v in per.items()}
+          def ltm_geral(per):
+              c = [(f, i) for (i, f) in per if (d_(f) - d_(i)).days >= 80]
+              if not c: return None, None, "sem_periodos"
+              F, ini1 = max(c, key=lambda x: (x[0], -d_(x[1]).toordinal()))
+              dur = (d_(F) - d_(ini1)).days
+              if dur >= 350: return per[(ini1, F)], F, ""
+              pi, pf = menos_ano(d_(ini1)).isoformat(), menos_ano(d_(F)).isoformat()
+              fy0 = per.get((pi, (d_(ini1) - timedelta(days=1)).isoformat())); p0 = per.get((pi, pf)); p1 = per[(ini1, F)]
+              if fy0 is None or p0 is None: return None, F, "faltou_comparativo"
+              return fy0 + p1 - p0, F, ""
+          def listar(rs, max_n=24):
               sel = []
               for r in rs:
-                  if dt_ref and r.get("DT_REFER") != dt_ref: continue
                   cd = r.get("CD_CONTA", ""); low = (r.get("DS_CONTA") or "").lower()
-                  if len(cd) <= 7 and any(k in low for k in ("lucro", "prejuízo", "prejuizo", "patrim")):
-                      sel.append((cd, (r.get("DS_CONTA") or "")[:50], r.get("VL_CONTA"), r.get("ESCALA_MOEDA"), r.get("ORDEM_EXERC"), r.get("DT_INI_EXERC"), r.get("DT_FIM_EXERC"), r.get("VERSAO")))
-              sel.sort(key=lambda x: (x[0], str(x[4]), str(x[5])))
-              for x in sel[:max_n]: p("    ", x)
+                  if len(cd) <= 7 and any(k in low for k in ("lucro", "prejuízo", "prejuizo", "patrim")) and "por ação" not in low and "tributos" not in low:
+                      sel.append((cd, (r.get("DS_CONTA") or "")[:40], r.get("VL_CONTA"), nord(r.get("ORDEM_EXERC")), r.get("DT_INI_EXERC"), r.get("DT_FIM_EXERC")))
+              sel.sort(key=lambda x: (x[0], x[3], str(x[4]), str(x[5])))
+              for x in sel[-max_n:]: p("    ", x)
           def jl(f, d=None): return json.load(open(f, encoding="utf-8")) if os.path.exists(f) else d
-          p("== Coleta CVM do universo", datetime.date.today().isoformat(), "==")
+          p("== Coleta CVM do universo v4", datetime.date.today().isoformat(), "==")
           uni = [a for a in jl("universo.json")["ativos"] if a.get("setor") not in ("ETF",)]
           precos = (jl("prices.json") or {}).get("prices", {})
           tick = {a["ticker"]: a for a in uni}
           yf, zf = zip_de("fca_cia_aberta", "FCA", [2026, 2025])
+          y26, zd26 = zip_de("dfp_cia_aberta", "DFP", [2026])
           yd, zd = zip_de("dfp_cia_aberta", "DFP", [2025, 2024])
           yi, zi = zip_de("itr_cia_aberta", "ITR", [2026, 2025])
-          y25, z25 = (None, None)
-          if yi == 2026: y25, z25 = zip_de("itr_cia_aberta", "ITR", [2025])
+          y25, z25 = zip_de("itr_cia_aberta", "ITR", [2025]) if yi == 2026 else (None, None)
           if not (zf and zd and zi):
               p("Faltou baixar algum arquivo."); open("diagnostico-cvm.md", "w", encoding="utf-8").write("```\n" + "\n".join(out) + "\n```\n"); sys.exit(0)
-          vm = rows(zf, "valor_mobiliario")
-          mapa = {}
+          vm = rows(zf, "valor_mobiliario"); mapa = {}
           for r in vm:
               t = (r.get("CODIGO_NEGOCIACAO") or "").strip().upper()
               if t in tick:
-                  k = (r.get("DATA_REFERENCIA") or "", int(r.get("VERSAO") or 0))
+                  k = (r.get("DATA_REFERENCIA") or "", vers(r))
                   if t not in mapa or k >= mapa[t][0]: mapa[t] = (k, r.get("CNPJ_COMPANHIA"))
-          dre_d = idx(rows(zd, "_DRE_con")); bpp_i = idx(rows(zi, "_BPP_con")); dre_i = idx(rows(zi, "_DRE_con"))
-          cap_i = idx(rows(zi, "composicao_capital")); cap_d = idx(rows(zd, "composicao_capital"))
-          dre_i25 = idx(rows(z25, "_DRE_con")) if z25 else {}
-          p("Linhas lidas: DFP DRE", len(dre_d), "empresas | ITR DRE", len(dre_i), "| ITR BPP", len(bpp_i), "| ITR composicao", len(cap_i))
-          res = []; listas = {"sem_cnpj": [], "sem_itr": [], "sem_dre": [], "prejuizo": [], "comparativo_ajustado": [], "escala_mil": [], "escala_incerta": [], "financeira": [], "pl_nao_achado": [], "pl_implausivel": []}
+          D = {"con": [], "ind": []}
+          for z in (zd, zd26, zi, z25):
+              D["con"] += rows(z, "_DRE_con"); D["ind"] += rows(z, "_DRE_ind")
+          dre = idx(D["con"]); dre_ind = idx(D["ind"])
+          bpp = idx(rows(zi, "_BPP_con") + rows(zd, "_BPP_con"))
+          bpp_ind = idx(rows(zi, "_BPP_ind") + rows(zd, "_BPP_ind"))
+          cap = idx(rows(zi, "composicao_capital") + rows(zd, "composicao_capital"))
+          nomes = {}
+          for r in D["con"][:400000]:
+              nomes.setdefault(r.get("CNPJ_CIA"), (r.get("DENOM_CIA") or "").upper())
+          for t, subs in ALIAS.items():
+              if t in tick and t not in mapa:
+                  achados = {c for c, n in nomes.items() for s in subs if s.upper() in n}
+                  if len(achados) == 1: mapa[t] = (("nome", 0), achados.pop())
+          p("Empresas com DRE consolidada:", len(dre), "| individual:", len(dre_ind), "| PL:", len(bpp), "| composicao:", len(cap))
+          res = []; L = {k: [] for k in ["sem_cnpj", "sem_dre", "lucro_nao_calculado", "prejuizo", "lucro_zero_suspeito", "usou_individual", "moeda_nao_real", "escala_mil", "escala_incerta", "financeira", "ano_fiscal_nao_calendario", "pl_nao_achado", "multiplo_implausivel", "mapeado_por_nome"]}
           for t, a in tick.items():
               r = {"ticker": t, "setor": a["setor"]}; flags = []
-              cnpj = mapa.get(t, (None, None))[1]
-              if not cnpj: listas["sem_cnpj"].append(t); res.append({**r, "flags": "sem_cnpj"}); continue
-              r["cnpj"] = cnpj
-              rd = dre_d.get(cnpj, [])
-              if not rd: listas["sem_dre"].append(t); res.append({**r, "flags": "sem_dre_con_dfp"}); continue
+              cnpj = (mapa.get(t) or (None, None))[1]
+              if not cnpj: L["sem_cnpj"].append(t); res.append({**r, "flags": "sem_cnpj"}); continue
+              if mapa[t][0][0] == "nome": L["mapeado_por_nome"].append(t); flags.append("cnpj_por_nome")
+              r["cnpj"] = cnpj; rd = dre.get(cnpj, []); ind = False
+              if not rd and dre_ind.get(cnpj): rd = dre_ind[cnpj]; ind = True; L["usou_individual"].append(t); flags.append("usou_demonstracao_individual")
+              if not rd: L["sem_dre"].append(t); res.append({**r, "flags": "sem_dre"}); continue
               r["nome"] = rd[0].get("DENOM_CIA", "")
-              fin = any("intermedia" in (x.get("DS_CONTA") or "").lower() and "financeira" in (x.get("DS_CONTA") or "").lower() for x in rd[:400])
-              if fin: listas["financeira"].append(t); flags.append("financeira")
-              cl, dyn = conta_lucro(rd); r["conta_lucro"] = cl
+              moeda = (rd[0].get("MOEDA") or "REAL").upper()
+              if moeda != "REAL": L["moeda_nao_real"].append(t); flags.append("moeda_" + moeda)
+              if any("intermedia" in (x.get("DS_CONTA") or "").lower() and "financeira" in (x.get("DS_CONTA") or "").lower() for x in rd[:600]): L["financeira"].append(t); flags.append("financeira")
+              cl, cons, dyn = conta_lucro(rd); r["conta_lucro"] = cl
+              if not cl: L["lucro_nao_calculado"].append(t); res.append({**r, "flags": ",".join(flags + ["sem_conta_lucro"])}); continue
               if dyn: flags.append("conta_lucro_detectada")
-              fy = melhor(rd, cl, "ULTIMO", fim=f"{yd}-12-31") if cl else None
-              ri = dre_i.get(cnpj, []); ltm = None; cur = prv = None; ref_i = None
-              if ri:
-                  ref_i = sorted({x["DT_REFER"] for x in ri})[-1]; ano = int(ref_i[:4]); r["ref"] = ref_i
-                  cli, _ = conta_lucro(ri); cli = cli or cl
-                  cur = melhor(ri, cli, "ULTIMO", ini=f"{ano}-01-01", fim=ref_i)
-                  pfim = f"{ano-1}{ref_i[4:]}"
-                  prv = melhor(ri, cli, "PENULTIMO", ini=f"{ano-1}-01-01", fim=pfim)
-                  if (prv is None or prv == 0.0) and cnpj in dre_i25:
-                      alt = melhor(dre_i25[cnpj], cli, "ULTIMO", ini=f"{ano-1}-01-01", fim=pfim)
-                      if alt is not None:
-                          flags.append("comparativo_vindo_do_ITR_2025"); listas["comparativo_ajustado"].append(t); prv = alt
-                  if fy is not None and cur is not None and prv is not None: ltm = fy + cur - prv
-              else:
-                  listas["sem_itr"].append(t); flags.append("sem_ITR_2026"); ltm = fy; r["ref"] = f"{yd}-12-31"
-              r.update({"lucro_fy": fy, "lucro_ytd": cur, "lucro_ytd_ant": prv, "lucro_ltm": ltm})
-              if ltm is not None and ltm <= 0: listas["prejuizo"].append(t); flags.append("lucro_12m_nao_positivo")
-              cp = (cap_i.get(cnpj) or cap_d.get(cnpj) or [])
-              raw = None
+              per = periodos(rd, cl); ltm, F, motivo = ltm_geral(per) if per else (None, None, "sem_valores")
+              if (ltm is None or ltm == 0.0) and cl != cons:
+                  per2 = periodos(rd, cons); l2, F2, m2 = ltm_geral(per2) if per2 else (None, None, "x")
+                  if l2 is not None and l2 != 0.0: ltm, F, motivo = l2, F2, ""; flags.append("lucro_consolidado_no_lugar_do_controlador")
+              r["ref"] = F; r["lucro_ltm"] = ltm
+              if F and not F.endswith(("-12-31", "-03-31", "-06-30", "-09-30")): pass
+              fy_meses = {d_(f).month for (i, f) in per if (d_(f) - d_(i)).days >= 350}
+              if fy_meses and fy_meses != {12}: L["ano_fiscal_nao_calendario"].append(t); flags.append("ano_fiscal_" + "-".join(str(m) for m in sorted(fy_meses)))
+              if ltm is None: L["lucro_nao_calculado"].append(t); flags.append("lucro_nao_calculado:" + motivo)
+              elif ltm == 0.0: L["lucro_zero_suspeito"].append(t); flags.append("lucro_exatamente_zero")
+              elif ltm < 0: L["prejuizo"].append(t); flags.append("prejuizo_12m")
+              cp = cap.get(cnpj) or []; raw = None
               if cp:
-                  c = sorted(cp, key=lambda x: (x.get("DT_REFER"), x.get("VERSAO")))[-1]
+                  c = sorted(cp, key=lambda x: (x.get("DT_REFER"), vers(x)))[-1]
                   try: raw = float(c["QT_ACAO_TOTAL_CAP_INTEGR"]) - float(c.get("QT_ACAO_TOTAL_TESOURO") or 0)
                   except Exception: raw = None
-              rb = bpp_i.get(cnpj, [])
-              pl_t = pl_c = None
+              rb = bpp.get(cnpj) or bpp_ind.get(cnpj) or []; pl_t = pl_c = None
               if rb:
                   cdp, mino = conta_pl(rb)
                   if cdp:
-                      reff = sorted({x["DT_REFER"] for x in rb})[-1]
-                      pl_t = melhor(rb, cdp, "ULTIMO", fim=reff)
-                      m = melhor(rb, mino, "ULTIMO", fim=reff) if mino else 0.0
-                      pl_c = None if pl_t is None else pl_t - (m or 0.0); r["conta_pl"] = cdp
-              if pl_c is None: listas["pl_nao_achado"].append(t); flags.append("pl_nao_achado")
+                      per_pl = {}
+                      for x in rb:
+                          if x.get("CD_CONTA") in (cdp, mino) and nord(x.get("ORDEM_EXERC")) == "ULTIMO":
+                              per_pl.setdefault(x["CD_CONTA"], {})[x["DT_FIM_EXERC"]] = val(x)
+                      if cdp in per_pl:
+                          fimx = max(per_pl[cdp]); pl_t = per_pl[cdp][fimx]
+                          m = per_pl.get(mino, {}).get(fimx, 0.0) if mino else 0.0
+                          pl_c = pl_t - (m or 0.0); r["conta_pl"] = cdp; r["ref_pl"] = fimx
+              if pl_c is None: L["pl_nao_achado"].append(t); flags.append("pl_nao_achado")
               r.update({"pl_total": pl_t, "pl_ctrl": pl_c})
-              px = precos.get(t) or a.get("preco_ref_30_10"); r["preco"] = px
-              mi = None
-              if raw and ltm and px:
+              px = precos.get(t) or a.get("preco_ref_30_10"); r["preco"] = px; mi = None
+              if raw and px:
                   for nome, div in (("unidades", 1e6), ("milhares", 1e3)):
-                      m_ = raw / div; lpa = ltm / m_
-                      vpa = (pl_c / m_) if pl_c else None
-                      ok_pl = lpa > 0 and 0.3 < px / lpa < 120
-                      ok_pv = vpa is None or (vpa > 0 and 0.05 < px / vpa < 40)
-                      if ok_pl and ok_pv: mi = m_; r["escala"] = nome; break
-                  if mi is None:
-                      mi = raw / 1e6; r["escala"] = "incerta"; listas["escala_incerta"].append(t); flags.append("escala_incerta")
-                  elif r["escala"] == "milhares": listas["escala_mil"].append(t); flags.append("acoes_em_milhares")
+                      m_ = raw / div
+                      ok_pl = ltm is None or ltm <= 0 or (0.3 < px / (ltm / m_) < 120)
+                      ok_pv = pl_c is None or pl_c <= 0 or (0.05 < px / (pl_c / m_) < 40)
+                      anda = (ltm is not None and ltm > 0) or (pl_c is not None and pl_c > 0)
+                      if anda and ok_pl and ok_pv: mi = m_; r["escala"] = nome; break
+                  if mi is None: mi = raw / 1e6; r["escala"] = "incerta"; L["escala_incerta"].append(t); flags.append("escala_incerta")
+                  elif r["escala"] == "milhares": L["escala_mil"].append(t); flags.append("acoes_em_milhares")
               elif raw: mi = raw / 1e6; r["escala"] = "sem_conferencia"
               r["acoes_mi"] = mi
-              if mi:
-                  r["lpa"] = ltm / mi if ltm is not None else None
-                  r["vpa"] = pl_c / mi if pl_c else None
+              if mi and "moeda_" not in ",".join(flags):
+                  r["lpa"] = ltm / mi if ltm is not None else None; r["vpa"] = pl_c / mi if pl_c else None
                   if px and r["lpa"] and r["lpa"] > 0: r["p_l"] = px / r["lpa"]
                   if px and r["vpa"] and r["vpa"] > 0: r["p_vp"] = px / r["vpa"]
-                  if r.get("p_vp") and not (0.05 < r["p_vp"] < 40): listas["pl_implausivel"].append(t); flags.append("p_vp_implausivel")
+                  if (r.get("p_vp") and not 0.05 < r["p_vp"] < 40) or (r.get("p_l") and not 0.3 < r["p_l"] < 120): L["multiplo_implausivel"].append(t); flags.append("multiplo_implausivel")
               r["flags"] = ",".join(flags); res.append(r)
-          cols = ["ticker", "cnpj", "nome", "setor", "ref", "conta_lucro", "lucro_fy", "lucro_ytd", "lucro_ytd_ant", "lucro_ltm", "acoes_mi", "escala", "conta_pl", "pl_total", "pl_ctrl", "preco", "lpa", "vpa", "p_l", "p_vp", "flags"]
+          cols = ["ticker", "cnpj", "nome", "setor", "ref", "conta_lucro", "lucro_ltm", "acoes_mi", "escala", "conta_pl", "ref_pl", "pl_total", "pl_ctrl", "preco", "lpa", "vpa", "p_l", "p_vp", "flags"]
           def fx(v): return "" if v is None else (f"{v:.4f}" if isinstance(v, float) else str(v))
           with open("dados-cvm.csv", "w", encoding="utf-8", newline="") as f:
               w = csv.writer(f, delimiter=";"); w.writerow(cols)
               for r in res: w.writerow([fx(r.get(c)) for c in cols])
+          usaveis = [r for r in res if r.get("lucro_ltm") and r["lucro_ltm"] > 0 and r.get("acoes_mi") and r.get("pl_ctrl") and not any(x in r.get("flags", "") for x in ("escala_incerta", "multiplo_implausivel", "moeda_"))]
           p("\n== RESUMO ==")
-          p("Tickers no universo (sem ETF):", len(tick), "| com CNPJ:", len(tick) - len(listas["sem_cnpj"]), "| com lucro 12m:", sum(1 for r in res if r.get("lucro_ltm") is not None), "| com PL:", sum(1 for r in res if r.get("pl_ctrl") is not None), "| com acoes:", sum(1 for r in res if r.get("acoes_mi")))
-          for k, v in listas.items(): p(f"{k} ({len(v)}):", ", ".join(v))
-          p("\n== REFERENCIAS CONHECIDAS ==")
+          p("Universo (sem ETF):", len(tick), "| com CNPJ:", len(tick) - len(L["sem_cnpj"]), "| com lucro 12m:", sum(1 for r in res if r.get("lucro_ltm") is not None), "| com PL:", sum(1 for r in res if r.get("pl_ctrl") is not None), "| com acoes:", sum(1 for r in res if r.get("acoes_mi")), "| USAVEIS direto (lucro>0, sem alerta de escala/moeda/multiplo):", len(usaveis))
+          for k, v in L.items(): p(f"{k} ({len(v)}):", ", ".join(v))
+          p("\n== REFERENCIAS ==")
           for t, e in REF.items():
               r = next((x for x in res if x["ticker"] == t), {})
-              p(t, "| esperado:", e, "| CVM: lucro12m", fx(r.get("lucro_ltm")), "PL controladores", fx(r.get("pl_ctrl")), "acoes(mi)", fx(r.get("acoes_mi")), "escala", r.get("escala"), "| flags:", r.get("flags"))
-          p("\n== TABELA (ticker | lucro 12m mi | acoes mi | PL ctrl mi | P/L | P/VP | flags) ==")
-          for r in res:
-              p(r["ticker"], "|", fx(r.get("lucro_ltm"))[:9], "|", fx(r.get("acoes_mi"))[:9], "|", fx(r.get("pl_ctrl"))[:9], "|", fx(r.get("p_l"))[:5], "|", fx(r.get("p_vp"))[:5], "|", r.get("flags", ""))
-          p("\n== CONTAS CANDIDATAS (para casos especiais) ==")
+              p(t, "| esperado:", e, "| CVM: lucro12m", fx(r.get("lucro_ltm"))[:10], "acoes", fx(r.get("acoes_mi"))[:9], "PLctrl", fx(r.get("pl_ctrl"))[:10], "P/L", fx(r.get("p_l"))[:6], "P/VP", fx(r.get("p_vp"))[:6], "| ref", r.get("ref"), "| flags:", r.get("flags"))
+          p("\n== TABELA (ticker | ref | lucro 12m | acoes mi | PL ctrl | P/L | P/VP | flags) ==")
+          for r in res: p(r["ticker"], "|", r.get("ref") or "", "|", fx(r.get("lucro_ltm"))[:9], "|", fx(r.get("acoes_mi"))[:9], "|", fx(r.get("pl_ctrl"))[:9], "|", fx(r.get("p_l"))[:5], "|", fx(r.get("p_vp"))[:5], "|", r.get("flags", ""))
+          p("\n== CONTAS CANDIDATAS (casos suspeitos) ==")
           for t in DEBUG:
-              cnpj = mapa.get(t, (None, None))[1]
-              if not cnpj: continue
-              p(f"--- {t} DFP DRE"); listar(dre_d.get(cnpj, []), dt_ref=f"{yd}-12-31")
-              p(f"--- {t} ITR DRE"); listar(dre_i.get(cnpj, []), dt_ref=sorted({x['DT_REFER'] for x in dre_i.get(cnpj, [])})[-1] if dre_i.get(cnpj) else None, max_n=30)
-              p(f"--- {t} ITR BPP"); listar(bpp_i.get(cnpj, []), dt_ref=sorted({x['DT_REFER'] for x in bpp_i.get(cnpj, [])})[-1] if bpp_i.get(cnpj) else None)
+              cnpj = (mapa.get(t) or (None, None))[1]
+              if not cnpj: p("---", t, "sem CNPJ"); continue
+              p(f"--- {t} DRE"); listar(dre.get(cnpj, []) or dre_ind.get(cnpj, []))
+              cp = sorted(cap.get(cnpj, []), key=lambda x: (x.get("DT_REFER"), vers(x)))[-2:]
+              for c in cp: p("    composicao:", {k: v for k, v in c.items() if k.startswith("QT_") or k in ("DT_REFER", "VERSAO")})
           p("\n== Fim ==")
           open("diagnostico-cvm.md", "w", encoding="utf-8").write("```\n" + "\n".join(out) + "\n```\n")
           PY
@@ -205,4 +232,4 @@ jobs:
           git config user.name "diagnostico-bot"
           git config user.email "diagnostico-bot@users.noreply.github.com"
           git add diagnostico-cvm.md dados-cvm.csv
-          git diff --cached --quiet || (git commit -m "Coleta CVM do universo" && git pull --rebase && git push)
+          git diff --cached --quiet || (git commit -m "Coleta CVM do universo v4" && git pull --rebase && git push)
