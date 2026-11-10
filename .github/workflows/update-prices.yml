@@ -16,7 +16,8 @@ jobs:
           TOKEN: ${{ secrets.BRAPI_TOKEN }}
         run: |
           python3 - <<'PY'
-          import json, os, time, urllib.request, datetime, zoneinfo
+          import csv, json, os, time, urllib.request, datetime, zoneinfo
+          BRT = zoneinfo.ZoneInfo("America/Sao_Paulo")
           uni = json.load(open("universo.json", encoding="utf-8"))["ativos"]
           T = [a["ticker"] for a in uni]
           ref = {a["ticker"]: a.get("preco_ref_30_10") for a in uni}
@@ -24,43 +25,89 @@ jobs:
           tok = os.environ["TOKEN"]
           pause = float(os.environ.get("PAUSE", "1"))
           old = json.load(open("prices.json", encoding="utf-8"))
-          prices = dict(old["prices"])
+          prices = dict(old["prices"]); pend = dict(old.get("pendentes", {}))
+          hoje = datetime.datetime.now(BRT).date()
+          for t in list(pend):
+              try:
+                  if (hoje - datetime.date.fromisoformat(pend[t]["data"])).days > 7: pend.pop(t)
+              except Exception: pend.pop(t, None)
           for t in T:
-              if t not in prices and ref.get(t):
-                  prices[t] = ref[t]
-          new, erros = {}, []
+              if t not in prices and ref.get(t): prices[t] = ref[t]
+          new, tdates, erros = {}, {}, []
           for t in T:
               ok = False
-              for tentativa in range(2):
+              for k in range(2):
                   try:
                       req = urllib.request.Request(base + t, headers={"Authorization": "Bearer " + tok, "User-Agent": "Mozilla/5.0"})
-                      d = json.loads(urllib.request.urlopen(req, timeout=30).read().decode("utf-8"))
-                      v = float(d["results"][0]["regularMarketPrice"])
+                      d = json.loads(urllib.request.urlopen(req, timeout=30).read().decode("utf-8"))["results"][0]
+                      v = float(d["regularMarketPrice"])
                       if v > 0:
                           new[t] = v
-                          ok = True
-                          break
+                          rt = d.get("regularMarketTime")
+                          if rt:
+                              try: tdates[t] = datetime.datetime.fromisoformat(str(rt).replace("Z", "+00:00")).astimezone(BRT).date().isoformat()
+                              except Exception: pass
+                          ok = True; break
                   except Exception:
                       time.sleep(2 * pause)
-              if not ok:
-                  erros.append(t)
+              if not ok: erros.append(t)
               time.sleep(pause)
-          bad = []
+          alertas, eventos, gravar = [], [], {}
           for t, v in new.items():
               o = prices.get(t)
               if o and abs(v / o - 1) > 0.25:
-                  bad.append(t)
+                  var = (v / o - 1) * 100
+                  pd_ = pend.get(t)
+                  if pd_ and abs(v / pd_["valor"] - 1) <= 0.05:
+                      prices[t] = round(v, 2); pend.pop(t, None); gravar[t] = round(v, 2)
+                      alertas.append(f"{t}: variacao de {var:+.0f}% confirmada em duas leituras; preco aceito")
+                      eventos.append((hoje.isoformat(), t, "salto_confirmado", f"{o} -> {round(v, 2)} ({var:+.0f}%)"))
+                  else:
+                      pend[t] = {"valor": round(v, 2), "data": hoje.isoformat()}
+                      alertas.append(f"{t}: variacao de {var:+.0f}% NAO aceita ainda (preco mantido); sera aceita se se repetir na proxima leitura")
+                      eventos.append((hoje.isoformat(), t, "salto_pendente", f"{o} -> {round(v, 2)} ({var:+.0f}%)"))
                   continue
-              prices[t] = round(v, 2)
+              pend.pop(t, None); prices[t] = round(v, 2); gravar[t] = round(v, 2)
           changed = prices != old["prices"]
-          date = datetime.datetime.now(zoneinfo.ZoneInfo("America/Sao_Paulo")).strftime("%d/%m/%Y")
-          if changed:
-              json.dump({"date": date, "prices": prices}, open("prices.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-          print("universo:", len(T), "| lidos:", len(new), "| sem resposta:", erros, "| descartados (variacao >25%):", bad, "| alterou:", changed)
+          # historico diario
+          if tdates: datas = tdates
+          else:
+              mexeu = sum(1 for t, v in gravar.items() if old["prices"].get(t) != v)
+              datas = {t: hoje.isoformat() for t in gravar} if (hoje.weekday() < 5 and mexeu > 0.2 * len(T)) else {}
+          novas = 0
+          if gravar and datas:
+              os.makedirs("historico/diario", exist_ok=True)
+              por_ano = {}
+              for t, v in gravar.items():
+                  d = datas.get(t)
+                  if d: por_ano.setdefault(d[:4], []).append((d, t, v))
+              for ano, lst in por_ano.items():
+                  f = f"historico/diario/{ano}.csv"; existe = set(); novo_arq = not os.path.exists(f)
+                  if not novo_arq:
+                      for r in csv.reader(open(f, encoding="utf-8"), delimiter=";"):
+                          if len(r) >= 2: existe.add((r[0], r[1]))
+                  with open(f, "a", encoding="utf-8", newline="") as fh:
+                      w = csv.writer(fh, delimiter=";")
+                      if novo_arq: w.writerow(["data", "ticker", "fechamento"])
+                      for d, t, v in sorted(lst):
+                          if (d, t) not in existe: w.writerow([d, t, v]); novas += 1
+          if eventos:
+              os.makedirs("historico", exist_ok=True)
+              f = "historico/eventos.csv"; novo = not os.path.exists(f)
+              with open(f, "a", encoding="utf-8", newline="") as fh:
+                  w = csv.writer(fh, delimiter=";")
+                  if novo: w.writerow(["data", "ticker", "tipo", "detalhe"])
+                  for e in eventos: w.writerow(e)
+          if changed or pend != old.get("pendentes", {}) or alertas:
+              data_ref = max(tdates.values()) if tdates else hoje.isoformat()
+              dd = datetime.date.fromisoformat(data_ref).strftime("%d/%m/%Y")
+              json.dump({"date": dd if changed else old["date"], "prices": prices, "pendentes": pend, "alertas": alertas}, open("prices.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+          print("universo:", len(T), "| lidos:", len(new), "| sem resposta:", erros, "| alterou:", changed, "| linhas novas no historico:", novas)
+          for a in alertas: print("ALERTA:", a)
           PY
       - name: Salvar se mudou
         run: |
           git config user.name "precos-bot"
           git config user.email "precos-bot@users.noreply.github.com"
-          git add prices.json
-          git diff --cached --quiet || (git commit -m "Atualiza precos" && git push)
+          git add prices.json historico
+          git diff --cached --quiet || (git commit -m "Atualiza precos" && git pull --rebase && git push)
