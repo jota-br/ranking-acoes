@@ -1,0 +1,103 @@
+name: Historico B3
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  historico:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Baixar historico da B3 e calcular estatisticas
+        env:
+          ANO_INI: "2015"
+        run: |
+          python3 - <<'PY'
+          import io, json, math, os, shutil, statistics as st, sys, tempfile, urllib.request, zipfile, datetime
+          ANO_INI = int(os.environ.get("ANO_INI", "2015")); ANO_FIM = datetime.date.today().year
+          BASE = os.environ.get("B3_BASE", "https://bvmf.bmfbovespa.com.br/InstDados/SerHist")
+          uni = [a["ticker"] for a in json.load(open("universo.json", encoding="utf-8"))["ativos"]]
+          alvo = set(uni) | {"BOVA11"}
+          series = {t: {} for t in alvo}
+          out = []
+          def p(*a):
+              s = " ".join(str(x) for x in a); print(s); out.append(s)
+          p("== Historico de precos B3 (COTAHIST) e estatisticas", datetime.date.today().isoformat(), "==")
+          for y in range(ANO_INI, ANO_FIM + 1):
+              url = f"{BASE}/COTAHIST_A{y}.ZIP"
+              tmp = tempfile.mktemp(suffix=".zip")
+              try:
+                  req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                  with urllib.request.urlopen(req, timeout=600) as r, open(tmp, "wb") as f: shutil.copyfileobj(r, f)
+              except Exception as e:
+                  p("FALHOU", url, repr(e)[:120]); continue
+              n = 0
+              with zipfile.ZipFile(tmp) as z:
+                  with z.open(z.namelist()[0]) as f:
+                      for raw in io.TextIOWrapper(f, encoding="latin-1"):
+                          if raw[:2] != "01" or raw[24:27] != "010" or raw[10:12] != "02": continue
+                          cod = raw[12:24].strip()
+                          if cod not in alvo: continue
+                          try: c = int(raw[108:121]) / 100
+                          except ValueError: continue
+                          dt = raw[2:10]; series[cod][f"{dt[:4]}-{dt[4:6]}-{dt[6:8]}"] = c; n += 1
+              os.remove(tmp); p("OK", url, "| linhas aproveitadas:", n)
+          os.makedirs("historico/precos", exist_ok=True)
+          rets, eventos, curtos, ausentes = {}, {}, [], []
+          for t in sorted(alvo):
+              s = series[t]
+              if not s: ausentes.append(t); continue
+              ds = sorted(s); cs = [s[d] for d in ds]; r = {}; ev = []
+              for i in range(1, len(ds)):
+                  x = cs[i] / cs[i - 1] - 1
+                  if abs(x) > 0.40: ev.append([ds[i], round(cs[i] / cs[i - 1], 3)]); x = 0.0
+                  r[ds[i]] = x
+              rets[t] = r; eventos[t] = ev
+              anos = (datetime.date.fromisoformat(ds[-1]) - datetime.date.fromisoformat(ds[0])).days / 365.25
+              if anos < 8: curtos.append(f"{t}({anos:.1f}a)")
+              json.dump({"t": t, "fonte": "B3 COTAHIST, fechamento nao ajustado por dividendos nem por eventos", "d": ds, "c": cs, "eventos": ev}, open(f"historico/precos/{t}.json", "w", encoding="utf-8"), separators=(",", ":"))
+          def mensal(r):
+              m = {}
+              for d, x in r.items(): m.setdefault(d[:7], []).append(x)
+              return {k: (math.prod(1 + v for v in l) - 1, len(l)) for k, l in m.items() if len(l) >= 15}
+          mb = mensal(rets["BOVA11"]) if "BOVA11" in rets else {}
+          saz, est = {}, {}
+          for t, r in rets.items():
+              mm = mensal(r); por = {}
+              for ym, (v, n) in mm.items(): por.setdefault(int(ym[5:]), []).append((ym, v))
+              saz[t] = {}
+              for mes, l in sorted(por.items()):
+                  vs = [v for _, v in l]; ex = [v - mb[ym][0] for ym, v in l if ym in mb]
+                  saz[t][mes] = {"n": len(vs), "media": round(st.mean(vs), 4), "mediana": round(st.median(vs), 4), "acerto": round(sum(1 for v in vs if v > 0) / len(vs), 3), "pior": round(min(vs), 4), "melhor": round(max(vs), 4)}
+                  if len(ex) >= 5: saz[t][mes].update({"excesso_medio": round(st.mean(ex), 4), "acerto_excesso": round(sum(1 for v in ex if v > 0) / len(ex), 3)})
+              ds = sorted(rets[t]); xs = [rets[t][d] for d in ds]
+              def vol(k): return round(st.pstdev(xs[-k:]) * math.sqrt(252), 4) if len(xs) >= k else None
+              def ret(k): return round(math.prod(1 + v for v in xs[-k:]) - 1, 4) if len(xs) >= k else None
+              ano_ini = [d for d in ds if d[:4] == ds[-1][:4]]
+              est[t] = {"inicio": ds[0], "fim": ds[-1], "vol30": vol(30), "vol90": vol(90), "vol252": vol(252), "ret21": ret(21), "ret63": ret(63), "ret126": ret(126), "ret252": ret(252), "ret_ano": round(math.prod(1 + rets[t][d] for d in ano_ini) - 1, 4)}
+          json.dump({"gerado": datetime.date.today().isoformat(), "aviso": "retornos calculados sobre fechamento nao ajustado por dividendos; saltos diarios acima de 40% tratados como evento corporativo e ignorados", "meses": saz}, open("sazonalidade.json", "w", encoding="utf-8"), separators=(",", ":"), ensure_ascii=False)
+          json.dump({"gerado": datetime.date.today().isoformat(), "tickers": est}, open("estatisticas.json", "w", encoding="utf-8"), separators=(",", ":"))
+          p("\nTickers com historico:", len(rets), "(inclui BOVA11) | sem nenhum dado:", len(ausentes), ", ".join(ausentes))
+          p("Historico curto (<8 anos):", len(curtos), ", ".join(curtos))
+          p("Eventos corporativos provaveis (salto >40% em um dia):", sum(len(v) for v in eventos.values()), "em", sum(1 for v in eventos.values() if v), "ativos:", ", ".join(f"{t}:{len(v)}" for t, v in eventos.items() if v))
+          NOMES = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"]
+          for t in ("PRIO3", "PETR4", "BOVA11"):
+              if t in saz: p(f"\nSazonalidade mensal {t} (media | acerto | n):", "; ".join(f"{NOMES[m]} {v['media']*100:+.1f}% {v['acerto']*100:.0f}% n{v['n']}" for m, v in saz[t].items()))
+          fortes = []
+          for t, ms in saz.items():
+              if t == "BOVA11": continue
+              for m, v in ms.items():
+                  if v["n"] >= 8 and v["acerto"] >= 0.75 and v["media"] >= 0.04: fortes.append((v["acerto"], v["media"], t, m, v["n"], v.get("excesso_medio")))
+          fortes.sort(reverse=True)
+          p(f"\nCombinacoes ativo-mes com n>=8, acerto>=75% e media>=4%: {len(fortes)} de {sum(len(v) for t, v in saz.items() if t != 'BOVA11')} possiveis (esperado ao acaso: varias, por isso exige-se confirmacao)")
+          for a, m_, t, mes, n, ex in fortes[:15]: p(f"  {t} {NOMES[mes]}: acerto {a*100:.0f}% media {m_*100:+.1f}% n={n}" + (f" excesso vs BOVA11 {ex*100:+.1f}%" if ex is not None else ""))
+          p("\n== Fim ==")
+          open("historico/relatorio-backfill.md", "w", encoding="utf-8").write("```\n" + "\n".join(out) + "\n```\n")
+          PY
+      - name: Salvar resultados
+        run: |
+          git config user.name "historico-bot"
+          git config user.email "historico-bot@users.noreply.github.com"
+          git add historico sazonalidade.json estatisticas.json
+          git diff --cached --quiet || (git commit -m "Historico B3 e estatisticas" && git pull --rebase && git push)
