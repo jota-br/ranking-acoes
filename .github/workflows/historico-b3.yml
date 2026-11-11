@@ -18,7 +18,8 @@ jobs:
           ANO_INI = int(os.environ.get("ANO_INI", "2015")); ANO_FIM = datetime.date.today().year
           BASE = os.environ.get("B3_BASE", "https://bvmf.bmfbovespa.com.br/InstDados/SerHist")
           uni = [a["ticker"] for a in json.load(open("universo.json", encoding="utf-8"))["ativos"]]
-          alvo = set(uni) | {"BOVA11"}
+          ALIAS_ANT = {"AXIA3": "ELET3", "MOTV3": "CCRO3", "EMBJ3": "EMBR3", "AZZA3": "ARZZ3", "RIAA3": "GUAR3", "ISAE4": "TRPL4", "ALOS3": "ALSC3", "VBBR3": "BRDT3", "TIMS3": "TIMP3", "YDUQ3": "ESTC3", "MBRF3": "MRFG3", "B3SA3": "BVMF3"}
+          alvo = set(uni) | {"BOVA11"} | {ALIAS_ANT[t] for t in uni if t in ALIAS_ANT}
           series = {t: {} for t in alvo}
           out = []
           def p(*a):
@@ -36,7 +37,7 @@ jobs:
               with zipfile.ZipFile(tmp) as z:
                   with z.open(z.namelist()[0]) as f:
                       for raw in io.TextIOWrapper(f, encoding="latin-1"):
-                          if raw[:2] != "01" or raw[24:27] != "010" or raw[10:12] != "02": continue
+                          if raw[:2] != "01" or raw[24:27] != "010" or raw[10:12] == "96": continue
                           cod = raw[12:24].strip()
                           if cod not in alvo: continue
                           try: c = int(raw[108:121]) / 100
@@ -44,8 +45,8 @@ jobs:
                           dt = raw[2:10]; series[cod][f"{dt[:4]}-{dt[4:6]}-{dt[6:8]}"] = c; n += 1
               os.remove(tmp); p("OK", url, "| linhas aproveitadas:", n)
           os.makedirs("historico/precos", exist_ok=True)
-          rets, eventos, curtos, ausentes = {}, {}, [], []
-          for t in sorted(alvo):
+          rets, eventos, curtos, ausentes, emendados = {}, {}, [], [], []
+          for t in sorted(set(uni) | {"BOVA11"}):
               s = series[t]
               if not s: ausentes.append(t); continue
               ds = sorted(s); cs = [s[d] for d in ds]; r = {}; ev = []
@@ -53,10 +54,21 @@ jobs:
                   x = cs[i] / cs[i - 1] - 1
                   if abs(x) > 0.40: ev.append([ds[i], round(cs[i] / cs[i - 1], 3)]); x = 0.0
                   r[ds[i]] = x
-              rets[t] = r; eventos[t] = ev
-              anos = (datetime.date.fromisoformat(ds[-1]) - datetime.date.fromisoformat(ds[0])).days / 365.25
+              emenda = None
+              if t in ALIAS_ANT and series.get(ALIAS_ANT[t]):
+                  sp = series[ALIAS_ANT[t]]; dp = sorted(sp)
+                  for i in range(1, len(dp)):
+                      if dp[i] >= ds[0]: break
+                      x = sp[dp[i]] / sp[dp[i - 1]] - 1
+                      if abs(x) > 0.40: ev.append([dp[i], round(sp[dp[i]] / sp[dp[i - 1]], 3)]); x = 0.0
+                      r[dp[i]] = x
+                  if r and min(r) < ds[0]: emenda = ALIAS_ANT[t]; r.pop(ds[0], None); r[ds[0]] = 0.0
+              rets[t] = dict(sorted(r.items())); eventos[t] = ev
+              first = min(rets[t]) if rets[t] else ds[0]
+              anos = (datetime.date.fromisoformat(ds[-1]) - datetime.date.fromisoformat(first)).days / 365.25
+              if emenda: emendados.append(f"{t}<-{emenda}")
               if anos < 8: curtos.append(f"{t}({anos:.1f}a)")
-              json.dump({"t": t, "fonte": "B3 COTAHIST, fechamento nao ajustado por dividendos nem por eventos", "d": ds, "c": cs, "eventos": ev}, open(f"historico/precos/{t}.json", "w", encoding="utf-8"), separators=(",", ":"))
+              json.dump({"t": t, "fonte": "B3 COTAHIST, fechamento nao ajustado por dividendos nem por eventos", "serie_anterior": ALIAS_ANT.get(t), "d": ds, "c": cs, "eventos": ev}, open(f"historico/precos/{t}.json", "w", encoding="utf-8"), separators=(",", ":"))
           def mensal(r):
               m = {}
               for d, x in r.items(): m.setdefault(d[:7], []).append(x)
@@ -65,11 +77,12 @@ jobs:
           saz, est = {}, {}
           for t, r in rets.items():
               mm = mensal(r); por = {}
+              gm = st.mean([v for v, n in mm.values()]) if mm else 0.0
               for ym, (v, n) in mm.items(): por.setdefault(int(ym[5:]), []).append((ym, v))
               saz[t] = {}
               for mes, l in sorted(por.items()):
                   vs = [v for _, v in l]; ex = [v - mb[ym][0] for ym, v in l if ym in mb]
-                  saz[t][mes] = {"n": len(vs), "media": round(st.mean(vs), 4), "mediana": round(st.median(vs), 4), "acerto": round(sum(1 for v in vs if v > 0) / len(vs), 3), "pior": round(min(vs), 4), "melhor": round(max(vs), 4)}
+                  saz[t][mes] = {"n": len(vs), "media": round(st.mean(vs), 4), "mediana": round(st.median(vs), 4), "acerto": round(sum(1 for v in vs if v > 0) / len(vs), 3), "pior": round(min(vs), 4), "melhor": round(max(vs), 4), "vs_ativo": round(st.mean(vs) - gm, 4)}
                   if len(ex) >= 5: saz[t][mes].update({"excesso_medio": round(st.mean(ex), 4), "acerto_excesso": round(sum(1 for v in ex if v > 0) / len(ex), 3)})
               ds = sorted(rets[t]); xs = [rets[t][d] for d in ds]
               def vol(k): return round(st.pstdev(xs[-k:]) * math.sqrt(252), 4) if len(xs) >= k else None
@@ -78,12 +91,13 @@ jobs:
               est[t] = {"inicio": ds[0], "fim": ds[-1], "vol30": vol(30), "vol90": vol(90), "vol252": vol(252), "ret21": ret(21), "ret63": ret(63), "ret126": ret(126), "ret252": ret(252), "ret_ano": round(math.prod(1 + rets[t][d] for d in ano_ini) - 1, 4)}
           json.dump({"gerado": datetime.date.today().isoformat(), "aviso": "retornos calculados sobre fechamento nao ajustado por dividendos; saltos diarios acima de 40% tratados como evento corporativo e ignorados", "meses": saz}, open("sazonalidade.json", "w", encoding="utf-8"), separators=(",", ":"), ensure_ascii=False)
           json.dump({"gerado": datetime.date.today().isoformat(), "tickers": est}, open("estatisticas.json", "w", encoding="utf-8"), separators=(",", ":"))
+          p("\nSeries emendadas pelo ticker anterior (retornos, nao precos):", ", ".join(emendados))
           p("\nTickers com historico:", len(rets), "(inclui BOVA11) | sem nenhum dado:", len(ausentes), ", ".join(ausentes))
           p("Historico curto (<8 anos):", len(curtos), ", ".join(curtos))
           p("Eventos corporativos provaveis (salto >40% em um dia):", sum(len(v) for v in eventos.values()), "em", sum(1 for v in eventos.values() if v), "ativos:", ", ".join(f"{t}:{len(v)}" for t, v in eventos.items() if v))
           NOMES = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"]
           for t in ("PRIO3", "PETR4", "BOVA11"):
-              if t in saz: p(f"\nSazonalidade mensal {t} (media | acerto | n):", "; ".join(f"{NOMES[m]} {v['media']*100:+.1f}% {v['acerto']*100:.0f}% n{v['n']}" for m, v in saz[t].items()))
+              if t in saz: p(f"\nSazonalidade mensal {t} (media | acerto | n):", "; ".join(f"{NOMES[m]} {v['media']*100:+.1f}% ({v['vs_ativo']*100:+.1f} vs media do ativo) {v['acerto']*100:.0f}% n{v['n']}" for m, v in saz[t].items()))
           fortes = []
           for t, ms in saz.items():
               if t == "BOVA11": continue
@@ -92,6 +106,43 @@ jobs:
           fortes.sort(reverse=True)
           p(f"\nCombinacoes ativo-mes com n>=8, acerto>=75% e media>=4%: {len(fortes)} de {sum(len(v) for t, v in saz.items() if t != 'BOVA11')} possiveis (esperado ao acaso: varias, por isso exige-se confirmacao)")
           for a, m_, t, mes, n, ex in fortes[:15]: p(f"  {t} {NOMES[mes]}: acerto {a*100:.0f}% media {m_*100:+.1f}% n={n}" + (f" excesso vs BOVA11 {ex*100:+.1f}%" if ex is not None else ""))
+
+          import random
+          def comb_passa(grupos, nmin=8, ac=0.75, med=0.04):
+              k = 0
+              for l in grupos.values():
+                  if len(l) >= nmin and sum(1 for v in l if v > 0) / len(l) >= ac and sum(l) / len(l) >= med: k += 1
+              return k
+          mens = {}
+          for t, r in rets.items():
+              if t == "BOVA11": continue
+              mens[t] = [(ym, v) for ym, (v, n) in mensal(r).items()]
+          obs = 0
+          for t, l in mens.items():
+              g = {}
+              for ym, v in l: g.setdefault(int(ym[5:]), []).append(v)
+              obs += comb_passa(g)
+          random.seed(11); sim = []
+          for _ in range(200):
+              c = 0
+              for t, l in mens.items():
+                  meses = [int(ym[5:]) for ym, v in l]; random.shuffle(meses); g = {}
+                  for m_, (ym, v) in zip(meses, l): g.setdefault(m_, []).append(v)
+                  c += comb_passa(g)
+              sim.append(c)
+          sim.sort()
+          p(f"\nTESTE DE ACASO (embaralhando os meses de cada ativo, 200 vezes): combinacoes que passam no corte = media {sum(sim)/len(sim):.0f}, percentil 95 = {sim[190]}; observado nos dados reais = {obs}")
+          for corte in (2020, 2022):
+              sel = 0; ac_t = []; med_t = []; todos_t = []
+              for t, l in mens.items():
+                  tr, te = {}, {}
+                  for ym, v in l: (tr if int(ym[:4]) <= corte else te).setdefault(int(ym[5:]), []).append(v)
+                  for m_, vs in tr.items():
+                      if len(vs) >= 5 and sum(1 for v in vs if v > 0) / len(vs) >= 0.75 and sum(vs) / len(vs) >= 0.04 and len(te.get(m_, [])) >= 2:
+                          sel += 1; ac_t += [v > 0 for v in te[m_]]; med_t += te[m_]
+                  for m_, vs in te.items(): todos_t += vs
+              if ac_t:
+                  p(f"TESTE FORA DA AMOSTRA (escolhe com dados ate {corte}, confere depois): {sel} combinacoes escolhidas | acerto depois = {sum(ac_t)/len(ac_t)*100:.0f}% | retorno medio depois = {sum(med_t)/len(med_t)*100:+.1f}% | referencia (todos os ativo-meses depois) acerto {sum(1 for v in todos_t if v > 0)/len(todos_t)*100:.0f}%, media {sum(todos_t)/len(todos_t)*100:+.1f}%")
           p("\n== Fim ==")
           open("historico/relatorio-backfill.md", "w", encoding="utf-8").write("```\n" + "\n".join(out) + "\n```\n")
           PY
@@ -100,4 +151,4 @@ jobs:
           git config user.name "historico-bot"
           git config user.email "historico-bot@users.noreply.github.com"
           git add historico sazonalidade.json estatisticas.json
-          git diff --cached --quiet || (git commit -m "Historico B3 e estatisticas" && git pull --rebase && git push)
+          git diff --cached --quiet || (git commit -m "Historico B3 e estatisticas v2" && git pull --rebase && git push)
