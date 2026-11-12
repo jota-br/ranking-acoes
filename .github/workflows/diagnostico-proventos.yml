@@ -1,0 +1,54 @@
+name: Diagnostico proventos
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  proventos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Testar fontes de proventos
+        env:
+          TOKEN: ${{ secrets.BRAPI_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import base64, json, os, urllib.request, datetime
+          out = []
+          def p(*a):
+              s = " ".join(str(x) for x in a); print(s); out.append(s)
+          def get(url, headers=None):
+              try:
+                  req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json, text/plain, */*", **(headers or {})})
+                  r = urllib.request.urlopen(req, timeout=60); b = r.read()
+                  return r.status, r.headers.get("Content-Type"), len(b), b[:1800].decode("utf-8", "replace")
+              except Exception as e:
+                  return "ERRO", "", 0, repr(e)[:300]
+          def b64(d): return base64.b64encode(json.dumps(d).encode()).decode()
+          B3 = "https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall"
+          p("== Diagnostico de proventos e eventos (fontes para preco ajustado)", datetime.date.today().isoformat(), "==")
+          base = {"language": "pt-br", "pageNumber": 1, "pageSize": 10}
+          tests = [
+              ("B3: busca de empresa 'PETR'", f"{B3}/GetInitialCompanies/{b64({**base, 'company': 'PETR'})}"),
+              ("B3: proventos em dinheiro, PETROBRAS", f"{B3}/GetListedCashDividends/{b64({**base, 'tradingName': 'PETROBRAS'})}"),
+              ("B3: proventos em acoes (desdobramentos, bonificacoes), PETROBRAS", f"{B3}/GetListedSupplementCompany/{b64({**base, 'tradingName': 'PETROBRAS'})}"),
+              ("B3: proventos em dinheiro, ITAUUNIBANCO", f"{B3}/GetListedCashDividends/{b64({**base, 'tradingName': 'ITAUUNIBANCO'})}"),
+          ]
+          for nome, url in tests:
+              st, ct, n, corpo = get(url)
+              p(f"\n--- {nome}\nURL: {url[:140]}...\nstatus: {st} | tipo: {ct} | bytes: {n}\n{corpo}")
+          tok = os.environ.get("TOKEN")
+          for t in ("PETR4", "PRIO3"):
+              url = f"https://brapi.dev/api/quote/{t}?dividends=true"
+              st, ct, n, corpo = get(url, {"Authorization": "Bearer " + tok} if tok else None)
+              p(f"\n--- brapi dividendos {t}\nstatus: {st} | tipo: {ct} | bytes: {n}\n{corpo}")
+          p("\n== Fim ==")
+          open("diagnostico-proventos.md", "w", encoding="utf-8").write("```\n" + "\n".join(out) + "\n```\n")
+          PY
+      - name: Salvar o relatorio
+        run: |
+          git config user.name "diagnostico-bot"
+          git config user.email "diagnostico-bot@users.noreply.github.com"
+          git add diagnostico-proventos.md
+          git diff --cached --quiet || (git commit -m "Diagnostico proventos" && git pull --rebase && git push)
