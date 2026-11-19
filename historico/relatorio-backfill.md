@@ -1,5 +1,5 @@
 ```
-== Historico de precos B3 (COTAHIST) e estatisticas 2026-11-11 ==
+== Historico B3 com preco ajustado por proventos 2026-11-19 ==
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2015.ZIP | linhas aproveitadas: 23329
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2016.ZIP | linhas aproveitadas: 23940
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2017.ZIP | linhas aproveitadas: 24774
@@ -11,40 +11,74 @@ OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2022.ZIP | linhas 
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2023.ZIP | linhas aproveitadas: 36320
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2024.ZIP | linhas aproveitadas: 37225
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2025.ZIP | linhas aproveitadas: 37377
-OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2026.ZIP | linhas aproveitadas: 32439
+OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2026.ZIP | linhas aproveitadas: 33345
+Linhas do historico diario da brapi acrescentadas apos o ultimo dia da B3: 5
+Proventos: empresas encontradas na B3: 151 | sem empresa: 12 ALSC3, ARZZ3, BRDT3, BVMF3, CCRO3, ELET3, ESTC3, GUAR3, MRFG3, SMAL11, TIMP3, TRPL4 | sem eventos para a classe: 7 ABEV3, CURY3, EMBR3, KLBN11, LIGT3, ONCO3, ORVR3
 
-Series emendadas pelo ticker anterior (retornos, nao precos): ALOS3<-ALSC3, AXIA3<-ELET3, AZZA3<-ARZZ3, B3SA3<-BVMF3, EMBJ3<-EMBR3, ISAE4<-TRPL4, MBRF3<-MRFG3, MOTV3<-CCRO3, RIAA3<-GUAR3, TIMS3<-TIMP3, VBBR3<-BRDT3, YDUQ3<-ESTC3
+Tickers com historico: 152 | sem nenhum dado: 0 
+Series emendadas pelo ticker anterior: ALOS3<-ALSC3, AXIA3<-ELET3, AZZA3<-ARZZ3, B3SA3<-BVMF3, EMBJ3<-EMBR3, ISAE4<-TRPL4, MBRF3<-MRFG3, MOTV3<-CCRO3, RIAA3<-GUAR3, TIMS3<-TIMP3, VBBR3<-BRDT3, YDUQ3<-ESTC3
+Historico curto (<8 anos): 43 AMER3(5.3a), ARML3(5.3a), ASAI3(5.7a), AUAU3(0.9a), AURE3(4.6a), BHIA3(3.2a), BLAU3(5.6a), BMGB4(7.0a), BMOB3(5.8a), BRAV3(2.2a), CEAB3(7.1a), CMIN3(5.7a), COGN3(7.1a), CURY3(6.2a), CXSE3(5.6a), DESK3(5.3a), DXCO3(5.2a), GGPS3(5.6a), GMAT3(6.1a), IGTI11(5.0a), INTB3(5.8a), JALL3(5.8a), LAND3(5.3a), LJQQ3(6.3a), LOGG3(7.9a), LWSA3(6.8a), MATD3(5.6a), MDNE3(6.8a), MTRE3(6.8a), ONCO3(5.3a), ORVR3(5.7a), PGMN3(6.2a), RAIZ4(5.3a), RDOR3(5.9a), RECV3(5.5a), SAUD3(0.5a), SBFG3(5.6a), SIMH3(6.2a), SMFT3(5.3a), TASA4(7.0a), TTEN3(5.3a), VAMO3(5.8a), VIVA3(7.1a)
+Proventos aplicados no ajuste: 3843 | ignorados (fora da serie, sem preco ou valor absurdo): 3594
+Desdobramentos/grupamentos aplicados: 69 | saltos reais mantidos (nao ajustados): 34
+   aplicado: AMER3 2024-11-14 grupamento 3:1 fator 2.801
+   aplicado: ANIM3 2021-02-19 desdobramento 3:1 fator 0.337
+   aplicado: ARML3 2026-10-26 desdobramento 2:1 fator 0.469
+   aplicado: ASAI3 2021-08-12 desdobramento 5:1 fator 0.197
+   aplicado: B3SA3 2021-05-17 desdobramento 3:1 fator 0.328
+   aplicado: BBAS3 2024-04-16 desdobramento 2:1 fator 0.494
+   aplicado: BPAC11 2021-07-01 desdobramento 4:1 fator 0.247
+   aplicado: CEAB3 2026-10-26 desdobramento 2:1 fator 0.525
+   aplicado: CPLE3 2021-03-12 desdobramento 10:1 fator 0.103
+   aplicado: CSAN3 2021-05-06 desdobramento 4:1 fator 0.242
+   aplicado: CSAN3 2026-10-26 desdobramento 2:1 fator 0.533
+   aplicado: CSMG3 2020-11-26 desdobramento 3:1 fator 0.332
+   aplicado: DASA3 2021-04-07 desdobramento 2:1 fator 0.5
+   aplicado: DIRR3 2025-08-11 desdobramento 3:1 fator 0.333
+   aplicado: ENEV3 2016-05-12 grupamento 100:1 fator 103.333
+   aplicado: ENEV3 2021-03-12 desdobramento 4:1 fator 0.254
+   aplicado: EQTL3 2019-11-28 desdobramento 5:1 fator 0.201
+   aplicado: FESA4 2024-01-24 desdobramento 4:1 fator 0.255
+   aplicado: FLRY3 2017-06-27 desdobramento 2:1 fator 0.499
+   aplicado: HAPV3 2020-11-25 desdobramento 5:1 fator 0.202
+   aplicado: HAPV3 2025-06-06 grupamento 15:1 fator 14.781
+   aplicado: IGTI11 2021-12-27 desdobramento 10:1 fator 0.1
+   aplicado: IRBR3 2019-09-26 desdobramento 3:1 fator 0.336
+   aplicado: IRBR3 2023-01-25 grupamento 25:1 fator 23.72
+   aplicado: JSLG3 2020-11-11 desdobramento 3:1 fator 0.329
+   mantido: AMER3 2023-01-12 variacao -77%
+   mantido: AMER3 2023-01-19 variacao -43%
+   mantido: AMER3 2024-08-15 variacao -58%
+   mantido: AMER3 2024-08-27 variacao +13900%
+   mantido: ANIM3 2026-10-26 variacao -44%
+   mantido: ASAI3 2026-10-26 variacao -43%
+   mantido: BHIA3 2023-12-15 variacao +2134%
+   mantido: BHIA3 2026-08-31 variacao +65%
+   mantido: BRAP4 2021-12-17 variacao -58%
+   mantido: CYRE3 2026-10-26 variacao -45%
+   mantido: DASA3 2026-10-26 variacao -43%
+   mantido: DXCO3 2026-10-26 variacao -40%
+   mantido: ECOR3 2026-10-26 variacao -60%
+   mantido: EZTC3 2026-10-26 variacao -42%
+   mantido: GRND3 2018-06-01 variacao -64%
+   mantido: HAPV3 2025-11-13 variacao -42%
+   mantido: HAPV3 2026-10-26 variacao -55%
+   mantido: LJQQ3 2026-10-26 variacao -64%
+   mantido: MGLU3 2015-10-01 variacao +631%
+   mantido: MGLU3 2026-10-26 variacao -58%
+   mantido: MOVI3 2026-10-26 variacao -58%
+   mantido: MRVE3 2026-10-26 variacao -43%
+   mantido: NATU3 2025-07-02 variacao -72%
+   mantido: ONCO3 2026-03-23 variacao +57%
+   mantido: PCAR3 2017-02-01 variacao +139%
 
-Tickers com historico: 152 (inclui BOVA11) | sem nenhum dado: 0 
-Historico curto (<8 anos): 43 AMER3(5.3a), ARML3(5.3a), ASAI3(5.7a), AUAU3(0.8a), AURE3(4.6a), BHIA3(3.1a), BLAU3(5.6a), BMGB4(6.9a), BMOB3(5.7a), BRAV3(2.2a), CEAB3(7.0a), CMIN3(5.7a), COGN3(7.1a), CURY3(6.1a), CXSE3(5.5a), DESK3(5.3a), DXCO3(5.2a), GGPS3(5.5a), GMAT3(6.1a), IGTI11(5.0a), INTB3(5.8a), JALL3(5.7a), LAND3(5.3a), LJQQ3(6.2a), LOGG3(7.9a), LWSA3(6.8a), MATD3(5.6a), MDNE3(6.7a), MTRE3(6.8a), ONCO3(5.2a), ORVR3(5.7a), PGMN3(6.2a), RAIZ4(5.2a), RDOR3(5.9a), RECV3(5.5a), SAUD3(0.5a), SBFG3(5.6a), SIMH3(6.1a), SMFT3(5.3a), TASA4(7.0a), TTEN3(5.3a), VAMO3(5.8a), VIVA3(7.1a)
-Eventos corporativos provaveis (salto >40% em um dia): 106 em 69 ativos: AMER3:5, ANIM3:2, ARML3:1, ASAI3:2, AXIA3:1, B3SA3:1, BBAS3:1, BHIA3:2, BPAC11:1, BRAP4:1, CEAB3:1, CPLE3:1, CSAN3:2, CSMG3:1, CYRE3:1, DASA3:2, DIRR3:1, DXCO3:1, ECOR3:1, ENEV3:2, EQTL3:1, EZTC3:1, FESA4:1, FLRY3:1, GRND3:1, HAPV3:4, IGTI11:1, IRBR3:2, ISAE4:1, JSLG3:2, KEPL3:2, LJQQ3:1, LREN3:1, LWSA3:1, MDIA3:1, MGLU3:6, MOVI3:1, MRVE3:1, MULT3:1, NATU3:2, ONCO3:1, ORVR3:1, PCAR3:4, PGMN3:1, PNVL3:1, PRIO3:4, PSSA3:1, RADL3:1, RANI3:2, RAPT4:1, RENT3:1, RIAA3:2, SAPR11:1, SBFG3:1, SBSP3:1, SHUL4:2, SIMH3:3, SLCE3:2, SMTO3:1, TASA4:1, TEND3:1, TOTS3:1, TRIS3:1, UGPA3:1, UNIP6:1, VAMO3:2, VIVT3:1, VULC3:2, WEGE3:2
-
-Sazonalidade mensal PRIO3 (media | acerto | n): jan +9.0% (+4.1 vs media do ativo) 82% n11; fev +6.6% (+1.7 vs media do ativo) 55% n11; mar +0.9% (-4.0 vs media do ativo) 64% n11; abr +4.3% (-0.6 vs media do ativo) 55% n11; mai +1.9% (-3.0 vs media do ativo) 36% n11; jun -2.1% (-7.0 vs media do ativo) 36% n11; jul +6.9% (+2.0 vs media do ativo) 75% n12; ago +2.3% (-2.6 vs media do ativo) 58% n12; set -1.0% (-5.9 vs media do ativo) 58% n12; out +7.9% (+3.0 vs media do ativo) 67% n12; nov +5.9% (+1.0 vs media do ativo) 55% n11; dez +16.5% (+11.6 vs media do ativo) 100% n11
-
-Sazonalidade mensal PETR4 (media | acerto | n): jan +3.3% (+1.3 vs media do ativo) 67% n12; fev +1.0% (-1.0 vs media do ativo) 58% n12; mar +3.2% (+1.2 vs media do ativo) 50% n12; abr +5.8% (+3.8 vs media do ativo) 58% n12; mai -3.4% (-5.4 vs media do ativo) 33% n12; jun +2.1% (+0.0 vs media do ativo) 58% n12; jul +5.4% (+3.4 vs media do ativo) 67% n12; ago -0.2% (-2.2 vs media do ativo) 50% n12; set +0.3% (-1.7 vs media do ativo) 67% n12; out +7.2% (+5.2 vs media do ativo) 75% n12; nov +1.6% (-0.5 vs media do ativo) 46% n11; dez -2.4% (-4.4 vs media do ativo) 36% n11
-
-Sazonalidade mensal BOVA11 (media | acerto | n): jan +3.1% (+2.0 vs media do ativo) 58% n12; fev +0.0% (-1.1 vs media do ativo) 58% n12; mar -0.2% (-1.3 vs media do ativo) 33% n12; abr +2.3% (+1.2 vs media do ativo) 75% n12; mai -1.3% (-2.4 vs media do ativo) 50% n12; jun +1.2% (+0.1 vs media do ativo) 75% n12; jul +3.0% (+1.9 vs media do ativo) 75% n12; ago +0.4% (-0.7 vs media do ativo) 42% n12; set +0.3% (-0.8 vs media do ativo) 67% n12; out +0.9% (-0.1 vs media do ativo) 58% n12; nov +2.0% (+0.9 vs media do ativo) 46% n11; dez +1.5% (+0.4 vs media do ativo) 55% n11
-
-Combinacoes ativo-mes com n>=8, acerto>=75% e media>=4%: 46 de 1804 possiveis (esperado ao acaso: varias, por isso exige-se confirmacao)
-  PRIO3 dez: acerto 100% media +16.5% n=11 excesso vs BOVA11 +15.0%
-  SAPR11 nov: acerto 100% media +7.6% n=8 excesso vs BOVA11 +3.7%
-  LEVE3 dez: acerto 91% media +5.1% n=11 excesso vs BOVA11 +3.6%
-  CAML3 ago: acerto 89% media +6.4% n=9 excesso vs BOVA11 +5.8%
-  MILS3 jul: acerto 83% media +12.0% n=12 excesso vs BOVA11 +9.0%
-  ANIM3 out: acerto 83% media +8.6% n=12 excesso vs BOVA11 +7.6%
-  WEGE3 jul: acerto 83% media +8.4% n=12 excesso vs BOVA11 +5.4%
-  MULT3 jan: acerto 83% media +6.3% n=12 excesso vs BOVA11 +3.3%
-  POMO4 jan: acerto 83% media +5.7% n=12 excesso vs BOVA11 +2.6%
-  SMTO3 mai: acerto 83% media +5.4% n=12 excesso vs BOVA11 +6.7%
-  ALPA4 out: acerto 83% media +5.0% n=12 excesso vs BOVA11 +4.0%
-  PRIO3 jan: acerto 82% media +9.0% n=11 excesso vs BOVA11 +5.3%
-  GGBR4 nov: acerto 82% media +8.4% n=11 excesso vs BOVA11 +6.4%
-  FRAS3 dez: acerto 82% media +6.8% n=11 excesso vs BOVA11 +5.3%
-  CSMG3 nov: acerto 82% media +6.6% n=11 excesso vs BOVA11 +4.6%
-
-TESTE DE ACASO (embaralhando os meses de cada ativo, 200 vezes): combinacoes que passam no corte = media 67, percentil 95 = 80; observado nos dados reais = 46
-TESTE FORA DA AMOSTRA (escolhe com dados ate 2020, confere depois): 133 combinacoes escolhidas | acerto depois = 46% | retorno medio depois = -0.7% | referencia (todos os ativo-meses depois) acerto 47%, media +0.0%
-TESTE FORA DA AMOSTRA (escolhe com dados ate 2022, confere depois): 118 combinacoes escolhidas | acerto depois = 49% | retorno medio depois = +0.0% | referencia (todos os ativo-meses depois) acerto 49%, media +0.4%
+Efeito do ajuste (retorno de preco bruto x ajustado, 12 meses) e DY 12m:
+   PETR4: bruto +30.0% | ajustado +40.4% | DY 12m 6.9% | vol 90d 37%
+   ITUB4: bruto -2.5% | ajustado +5.4% | DY 12m 7.9% | vol 90d 38%
+   BBAS3: bruto -39.8% | ajustado -38.0% | DY 12m 4.9% | vol 90d 63%
+   VALE3: bruto -9.3% | ajustado -2.0% | DY 12m 9.5% | vol 90d 28%
+   TAEE11: bruto -4.4% | ajustado +2.7% | DY 12m 5.1% | vol 90d 27%
+   PRIO3: bruto +53.5% | ajustado +53.5% | DY 12m 0.0% | vol 90d 39%
+   BOVA11: bruto +6.2% | ajustado +6.2% | DY 12m 0.0% | vol 90d 33%
 
 == Fim ==
 ```
