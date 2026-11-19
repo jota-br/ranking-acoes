@@ -1,5 +1,5 @@
 {
- "versao": "v006",
+ "versao": "v009",
  "status": "rascunho aprovado para teste por Jota em 04/11/2026",
  "setores": {
   "Construção civil": {
@@ -302,18 +302,17 @@
  },
  "gordon": {
   "ke": 0.15,
-  "pessimista": {
-   "roe": 0.18,
-   "g": 0.05
+  "roe_delta": {
+   "pessimista": -0.03,
+   "base": 0.0,
+   "otimista": 0.01
   },
-  "base": {
-   "roe": 0.22,
-   "g": 0.06
+  "g": {
+   "pessimista": 0.05,
+   "base": 0.06,
+   "otimista": 0.07
   },
-  "otimista": {
-   "roe": 0.23,
-   "g": 0.07
-  }
+  "nota": "ROE sustentavel de cada banco vem dos insumos (o menor entre o atual e a media de 3 anos). Pessimista = ROE -3 pontos, otimista = ROE +1 ponto."
  },
  "desvio": "O ChatGPT pode sugerir ate 2 pontos de desvio no multiplo, com justificativa; so vale apos aprovacao de Jota.",
  "nivel": "N1: upside>=60% e risco ate Medio, ou upside>=40% e risco ate Baixo/medio. N2: upside>=30% e risco ate Medio/alto. N3: demais."

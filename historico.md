@@ -2,6 +2,24 @@
 
 Cada mudança relevante vira uma versão numerada. Para desfazer, volte ao arquivo da versão anterior.
 
+## v010 — página de estatísticas, universo movido e preço ajustado por proventos
+- Nova página estatisticas.html: tabela do universo (movida da página principal) com retornos, volatilidade e DY; gráfico por ativo com períodos escolhidos (1M a Máx e datas livres), comparação com o BOVA11, retorno por ano, últimos proventos e saltos de preço.
+- A página principal perde a tabela do universo, ganha o link para as estatísticas e deixa de mostrar a data fixa de 30/10 (a data vem do prices.json).
+- Rotina "Historico B3" v3: baixa as cotações da B3, busca dividendos e JCP na B3, ajusta os preços (dividendos, JCP e desdobramentos/grupamentos detectados) e recalcula as estatísticas; roda toda semana (sábado) e sob demanda. Sazonalidade descartada.
+- Arquivos: index.html, estatisticas.html, analises.json (inclui o P/VP histórico do BBAS3), politica.json (ROE por banco), historico.md, e o conteúdo novo de .github/workflows/historico-b3.yml.
+
+## v009 — processamento automático de lotes
+- Novo fluxo: o CSV do ChatGPT é colado em um arquivo na pasta entrada/ do GitHub e uma rotina (processar-lote.yml) valida, aplica a política, grava no analises.json e escreve o relatorio-ultimo-lote.md. A página atualiza sozinha, sem novo envio de arquivos.
+- A rotina não aplica desvios sugeridos pelo ChatGPT: só os aprovados em desvios_aprovados.json (formato: {"TICKER": {"pontos": 1, "justificativa": "..."}}).
+- Política dos bancos corrigida: o ROE sustentável é o de cada banco (pessimista -3 pontos, otimista +1 ponto).
+- Entra também o histórico de P/VP do BBAS3 e o gráfico com duas casas decimais (v008).
+- Arquivos: index.html, analises.json, politica.json, historico.md, processar-lote.yml (colado em .github/workflows/).
+
+## v008 — histórico de P/VP do BBAS3
+- Entra o P/VP anual de 2021 a 2025 do BBAS3 (Investidor10, colado por Jota em 05/11/2026): mediana 0,66x, atual 0,51x. O valor justo original (22,50) equivale a cerca de 0,69x o patrimônio por ação, 5% acima da mediana, sem disparar o alerta.
+- O gráfico passa a mostrar duas casas decimais quando os múltiplos são pequenos (P/VP).
+- Arquivos: index.html, analises.json, historico.md.
+
 ## v007 — histórico de múltiplos, selos conferidos e gráfico nos detalhes
 - Entra o P/L anual de 2021 a 2025 (Investidor10, lido pelo ChatGPT em 05/11/2026) para VIVA3, DIRR3, CURY3 e TEND3. Nos detalhes: mediana, média, mínimo, máximo, atual e um gráfico de barras com a linha do múltiplo de referência.
 - Alerta (⚠) quando o múltiplo de referência fica mais de 30% longe da mediana de 5 anos. Nenhum ativo disparou o alerta nesta versão.

@@ -1,0 +1,196 @@
+name: Historico B3
+on:
+  schedule:
+    - cron: "0 12 * * 6"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  historico:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - name: Baixar historico da B3, proventos e calcular estatisticas
+        env:
+          ANO_INI: "2015"
+        run: |
+          python3 - <<'PY'
+          import base64, bisect, csv, glob, io, json, math, os, re, shutil, statistics as st, sys, tempfile, time, urllib.request, zipfile, datetime
+          ANO_INI = int(os.environ.get("ANO_INI", "2015")); HOJE = datetime.date.today(); ANO_FIM = HOJE.year
+          BASE = os.environ.get("B3_BASE", "https://bvmf.bmfbovespa.com.br/InstDados/SerHist")
+          API = os.environ.get("B3_API", "https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall")
+          PAUSA = float(os.environ.get("PAUSA", "0.25"))
+          uni = [a["ticker"] for a in json.load(open("universo.json", encoding="utf-8"))["ativos"]]
+          ALIAS_ANT = {"AXIA3": "ELET3", "MOTV3": "CCRO3", "EMBJ3": "EMBR3", "AZZA3": "ARZZ3", "RIAA3": "GUAR3", "ISAE4": "TRPL4", "ALOS3": "ALSC3", "VBBR3": "BRDT3", "TIMS3": "TIMP3", "YDUQ3": "ESTC3", "MBRF3": "MRFG3", "B3SA3": "BVMF3"}
+          alvo = set(uni) | {"BOVA11"} | {ALIAS_ANT[t] for t in uni if t in ALIAS_ANT}
+          alvos_saida = set(uni) | {"BOVA11"}
+          series = {t: {} for t in alvo}
+          out = []
+          def p(*a):
+              s = " ".join(str(x) for x in a); print(s); out.append(s)
+          p("== Historico B3 com preco ajustado por proventos", HOJE.isoformat(), "==")
+          for y in range(ANO_INI, ANO_FIM + 1):
+              url = f"{BASE}/COTAHIST_A{y}.ZIP"; tmp = tempfile.mktemp(suffix=".zip")
+              try:
+                  req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                  with urllib.request.urlopen(req, timeout=600) as r, open(tmp, "wb") as f: shutil.copyfileobj(r, f)
+              except Exception as e:
+                  p("FALHOU", url, repr(e)[:120]); continue
+              n = 0
+              with zipfile.ZipFile(tmp) as z:
+                  with z.open(z.namelist()[0]) as f:
+                      for raw in io.TextIOWrapper(f, encoding="latin-1"):
+                          if raw[:2] != "01" or raw[24:27] != "010" or raw[10:12] == "96": continue
+                          cod = raw[12:24].strip()
+                          if cod not in alvo: continue
+                          try: c = int(raw[108:121]) / 100
+                          except ValueError: continue
+                          dt = raw[2:10]; series[cod][f"{dt[:4]}-{dt[4:6]}-{dt[6:8]}"] = c; n += 1
+              os.remove(tmp); p("OK", url, "| linhas aproveitadas:", n)
+          ultimo_cot = {t: max(s) for t, s in series.items() if s}
+          adicionadas = 0
+          for f in sorted(glob.glob("historico/diario/*.csv")):
+              for r in csv.reader(open(f, encoding="utf-8"), delimiter=";"):
+                  if len(r) >= 3 and r[1] in series and r[1] in ultimo_cot and r[0] > ultimo_cot[r[1]]:
+                      try: series[r[1]][r[0]] = float(r[2]); adicionadas += 1
+                      except ValueError: pass
+          p("Linhas do historico diario da brapi acrescentadas apos o ultimo dia da B3:", adicionadas)
+          def b64(d): return base64.b64encode(json.dumps(d).encode()).decode()
+          TAM = [100]
+          def api(ep, payload, tries=3):
+              url = f"{API}/{ep}/{b64(payload)}"
+              for k in range(tries):
+                  try:
+                      req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+                      b = urllib.request.urlopen(req, timeout=60).read()
+                      return json.loads(b.decode("utf-8")) if b else None
+                  except Exception: time.sleep(1.5 * (k + 1))
+              return None
+          def raiz(t): return re.sub(r"\d+$", "", t)
+          cache_emp, cache_div = {}, {}
+          def empresa(rz):
+              if rz in cache_emp: return cache_emp[rz]
+              r = api("GetInitialCompanies", {"language": "pt-br", "pageNumber": 1, "pageSize": 20, "company": rz}); nome = None
+              for x in (r or {}).get("results", []):
+                  if (x.get("issuingCompany") or "").upper() == rz: nome = x.get("tradingName"); break
+              cache_emp[rz] = nome; time.sleep(PAUSA); return nome
+          def proventos_empresa(nome):
+              if nome in cache_div: return cache_div[nome]
+              res, pg = [], 1
+              while True:
+                  r = api("GetListedCashDividends", {"language": "pt-br", "pageNumber": pg, "pageSize": TAM[0], "tradingName": nome})
+                  if r is None and pg == 1 and TAM[0] != 20: TAM[0] = 20; continue
+                  if not r: break
+                  res += r.get("results", []); tp = (r.get("page") or {}).get("totalPages", 1)
+                  if pg >= tp or pg >= 80: break
+                  pg += 1; time.sleep(PAUSA)
+              cache_div[nome] = res; return res
+          CLS = {"3": "ON", "4": "PN", "5": "PNA", "6": "PNB", "7": "PNC", "8": "PND", "11": "UNT"}
+          def eventos_div(t, rows):
+              m = re.search(r"(\d+)$", t); cl = CLS.get(m.group(1)) if m else None; ev = {}
+              for x in rows:
+                  ts = (x.get("typeStock") or "").strip().upper()
+                  if cl and not (ts == cl or (cl == "UNT" and ts.startswith("UN"))): continue
+                  try: d = datetime.datetime.strptime(x["lastDatePriorEx"], "%d/%m/%Y").date().isoformat()
+                  except Exception: continue
+                  try:
+                      v = float(str(x.get("valueCash", "0")).replace(".", "").replace(",", "."))
+                      q = float(str(x.get("quotedPerShares") or "1").replace(",", ".")) or 1.0
+                  except ValueError: continue
+                  v = v / q; tipo = (x.get("corporateAction") or "").strip()
+                  if v > 0: ev[(d, round(v, 8), tipo)] = 1
+              return sorted(ev)
+          sem_empresa, sem_eventos, prov = [], [], {}
+          for t in sorted(alvo):
+              if t == "BOVA11" or not series[t]: continue
+              nome = empresa(raiz(t))
+              if not nome and t in ALIAS_ANT: nome = empresa(raiz(ALIAS_ANT[t]))
+              if not nome: sem_empresa.append(t); continue
+              ev = eventos_div(t, proventos_empresa(nome))
+              if not ev: sem_eventos.append(t)
+              prov[t] = ev
+          p("Proventos: empresas encontradas na B3:", len(prov), "| sem empresa:", len(sem_empresa), ", ".join(sem_empresa), "| sem eventos para a classe:", len(sem_eventos), ", ".join(sem_eventos))
+          def ajustar(ds, cs, divs):
+              n = len(ds); evat = {}; info = {"div_aplicados": 0, "div_ignorados": 0, "splits": []}; divi = {}
+              for dcom, v, tipo in divs:
+                  i0 = bisect.bisect_right(ds, dcom) - 1
+                  if i0 < 0 or i0 >= n - 1: info["div_ignorados"] += 1; continue
+                  P = cs[i0]
+                  if v <= 0 or v >= 0.5 * P: info["div_ignorados"] += 1; continue
+                  divi.setdefault(i0, []).append(v)
+              for i in range(1, n):
+                  r = cs[i] / cs[i - 1]
+                  if r < 0.6 or r > 1.4:
+                      if any(abs((cs[i - 1] - sum(vs)) / cs[i - 1] - r) < 0.05 for vs in [divi.get(i - 1, [])] if vs):
+                          info["splits"].append([ds[i], round(r, 3), "queda explicada por provento", "tratada como provento"]); continue
+                      kind = None
+                      for k in (2, 3, 4, 5, 6, 8, 10, 15, 20, 25, 30, 40, 50, 100):
+                          if abs(r * k - 1) <= 0.07: kind = f"desdobramento {k}:1"; break
+                          if abs(r / k - 1) <= 0.07: kind = f"grupamento {k}:1"; break
+                      if kind: evat[i - 1] = evat.get(i - 1, 1.0) * r; info["splits"].append([ds[i], round(r, 3), kind, "aplicado"])
+                      else: info["splits"].append([ds[i], round(r, 3), "salto real mantido", "nao aplicado"])
+              for i0, vs in divi.items():
+                  P = cs[i0]
+                  for v in vs: evat[i0] = evat.get(i0, 1.0) * (P - v) / P; info["div_aplicados"] += 1
+              fac = [1.0] * n; run = 1.0
+              for i in range(n - 1, -1, -1): run *= evat.get(i, 1.0); fac[i] = run
+              return [round(c * f, 4) for c, f in zip(cs, fac)], info
+          os.makedirs("historico/precos", exist_ok=True); os.makedirs("historico/proventos", exist_ok=True)
+          adj, infos, rets, ausentes = {}, {}, {}, []
+          for t in sorted(alvo):
+              s = series[t]
+              if not s: ausentes.append(t); continue
+              ds = sorted(s); cs = [s[d] for d in ds]
+              a, info = ajustar(ds, cs, prov.get(t, []))
+              adj[t] = (ds, cs, a); infos[t] = info
+              rets[t] = {ds[i]: a[i] / a[i - 1] - 1 for i in range(1, len(ds))}
+          emendados, curtos = [], []
+          for t in sorted(alvos_saida):
+              if t not in adj: continue
+              ds, cs, a = adj[t]; r = dict(rets[t]); emenda = None
+              if t in ALIAS_ANT and ALIAS_ANT[t] in rets:
+                  antes = {d: v for d, v in rets[ALIAS_ANT[t]].items() if d < ds[0]}
+                  if antes: r.update(antes); r[ds[0]] = 0.0; emenda = ALIAS_ANT[t]; emendados.append(f"{t}<-{emenda}")
+              rets[t] = dict(sorted(r.items())); first = min(rets[t])
+              anos = (datetime.date.fromisoformat(ds[-1]) - datetime.date.fromisoformat(first)).days / 365.25
+              if anos < 8: curtos.append(f"{t}({anos:.1f}a)")
+              json.dump({"t": t, "fonte": "B3 COTAHIST; a = fechamento ajustado por dividendos e JCP (B3) e por desdobramentos/grupamentos detectados; c = fechamento bruto", "ajustado": t != "BOVA11", "serie_anterior": ALIAS_ANT.get(t), "d": ds, "c": cs, "a": a, "splits": infos[t]["splits"]}, open(f"historico/precos/{t}.json", "w", encoding="utf-8"), separators=(",", ":"))
+              evs = sorted(prov.get(t, []), reverse=True)[:60]
+              json.dump({"t": t, "eventos": [[d, v, tp] for d, v, tp in evs]}, open(f"historico/proventos/{t}.json", "w", encoding="utf-8"), separators=(",", ":"))
+          est = {}
+          for t in sorted(alvos_saida):
+              if t not in adj: continue
+              ds, cs, a = adj[t]; rt = rets[t]; dd = sorted(rt); xs = [rt[d] for d in dd]
+              def vol(k): return round(st.pstdev(xs[-k:]) * math.sqrt(252), 4) if len(xs) >= k else None
+              def ret(k): return round(math.prod(1 + v for v in xs[-k:]) - 1, 4) if len(xs) >= k else None
+              ano = [d for d in dd if d[:4] == ds[-1][:4]]
+              lim = (datetime.date.fromisoformat(ds[-1]) - datetime.timedelta(days=365)).isoformat()
+              dy = sum(v for d, v, tp in prov.get(t, []) if lim < d <= ds[-1]) / cs[-1] if prov.get(t) else None
+              est[t] = {"inicio": ds[0], "fim": ds[-1], "vol30": vol(30), "vol90": vol(90), "vol252": vol(252), "ret21": ret(21), "ret63": ret(63), "ret126": ret(126), "ret252": ret(252), "ret_ano": round(math.prod(1 + rt[d] for d in ano) - 1, 4), "dy12m": round(dy, 4) if dy is not None else None}
+          json.dump({"gerado": HOJE.isoformat(), "ajustado": True, "tickers": est}, open("estatisticas.json", "w", encoding="utf-8"), separators=(",", ":"))
+          p("\nTickers com historico:", len(est), "| sem nenhum dado:", len(ausentes), ", ".join(a for a in ausentes if a in alvos_saida))
+          p("Series emendadas pelo ticker anterior:", ", ".join(emendados))
+          p("Historico curto (<8 anos):", len(curtos), ", ".join(curtos))
+          tot_div = sum(i["div_aplicados"] for t, i in infos.items() if t in alvos_saida); ign = sum(i["div_ignorados"] for t, i in infos.items() if t in alvos_saida)
+          p(f"Proventos aplicados no ajuste: {tot_div} | ignorados (fora da serie, sem preco ou valor absurdo): {ign}")
+          sp = [(t, x) for t, i in infos.items() if t in alvos_saida for x in i["splits"]]
+          ap = [(t, x) for t, x in sp if x[3] == "aplicado"]; na = [(t, x) for t, x in sp if x[3] == "nao aplicado"]
+          p(f"Desdobramentos/grupamentos aplicados: {len(ap)} | saltos reais mantidos (nao ajustados): {len(na)}")
+          for t, x in ap[:25]: p("   aplicado:", t, x[0], x[2], "fator", x[1])
+          for t, x in na[:25]: p("   mantido:", t, x[0], "variacao", f"{(x[1]-1)*100:+.0f}%")
+          p("\nEfeito do ajuste (retorno de preco bruto x ajustado, 12 meses) e DY 12m:")
+          for t in ("PETR4", "ITUB4", "BBAS3", "VALE3", "TAEE11", "PRIO3", "BOVA11"):
+              if t in adj and t in est:
+                  ds, cs, a = adj[t]; k = min(252, len(ds) - 1)
+                  p(f"   {t}: bruto {(cs[-1]/cs[-1-k]-1)*100:+.1f}% | ajustado {(a[-1]/a[-1-k]-1)*100:+.1f}% | DY 12m {(est[t]['dy12m'] or 0)*100:.1f}% | vol 90d {(est[t]['vol90'] or 0)*100:.0f}%")
+          p("\n== Fim ==")
+          os.makedirs("historico", exist_ok=True)
+          open("historico/relatorio-backfill.md", "w", encoding="utf-8").write("```\n" + "\n".join(out) + "\n```\n")
+          PY
+      - name: Salvar resultados
+        run: |
+          git config user.name "historico-bot"
+          git config user.email "historico-bot@users.noreply.github.com"
+          git add historico estatisticas.json
+          git diff --cached --quiet || (git commit -m "Historico B3 ajustado e estatisticas" && git pull --rebase && git push)

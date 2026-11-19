@@ -1,5 +1,5 @@
 {
- "versao": "v007",
+ "versao": "v008",
  "data_atualizacao": "04/11/2026",
  "ativos": [
   {
@@ -356,7 +356,29 @@
    "origem": "original",
    "verificado": true,
    "criterio_curto": "Análise original de 30/10/2026; múltiplo não documentado.",
-   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado."
+   "criterio_detalhe": "Valor justo da análise original de 30/10/2026, sem múltiplo documentado.",
+   "historico_multiplo": {
+    "indicador": "P/VP",
+    "anos": {
+     "2021": 0.58,
+     "2022": 0.63,
+     "2023": 0.94,
+     "2024": 0.77,
+     "2025": 0.66
+    },
+    "atual": 0.51,
+    "mediana_5a": 0.66,
+    "media_5a": 0.72,
+    "n_validos": 5,
+    "ref": {
+     "valor": 0.69,
+     "rotulo": "valor original"
+    },
+    "desvio_pct": 5.0,
+    "texto": "Mediana de 2021 a 2025: 0,66x (média 0,72x; mínimo 0,58x; máximo 0,94x). Atual: 0,51x. Aqui, o valor original (22,50) equivale a 0,69x o patrimônio por ação (R$ 32,47, do Status Invest em 30/10), 5% acima da mediana. Em P/L: 4,5x, 3,3x, 5,0x, 5,3x e 9,2x de 2021 a 2025 (mediana 5,0x); atual 7,7x, porque o lucro caiu.",
+    "fonte": "Investidor10 (colado por Jota)",
+    "data": "05/11/2026"
+   }
   },
   {
    "ticker": "SMAL11",

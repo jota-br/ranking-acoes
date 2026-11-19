@@ -31,10 +31,10 @@ svg{width:100%;height:auto;display:block}svg text{fill:var(--mu);font-size:11px}
 .lg span{display:inline-flex;align-items:center;gap:4px;margin-right:12px;font-size:12px;color:var(--mu)}.lg i{width:10px;height:10px;border-radius:50%;display:inline-block}
 .ft{color:var(--mu);font-size:11px;margin-top:14px}
 #tip{position:fixed;display:none;max-width:260px;background:var(--tx);color:var(--bg);padding:8px 10px;border-radius:8px;font-size:12px;line-height:1.4;z-index:50;box-shadow:0 4px 14px rgba(0,0,0,.3);pointer-events:none}
-.i{color:var(--ac);font-size:11px}[data-tip]{cursor:help}
+a{color:var(--ac)}.i{color:var(--ac);font-size:11px}[data-tip]{cursor:help}
 input,select{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:5px 8px}label{font-size:12px;color:var(--mu);display:flex;flex-direction:column;gap:2px}input[type=number]{width:130px}#sm{min-width:560px}#ut{min-width:560px}#ut th:nth-child(-n+2),#ut td:nth-child(-n+2){text-align:left}
 </style></head><body><div class="w">
-<div class="hd"><div><h1>📊 Ranking de Ações — Matriz Fundamentalista</h1><div class="sub">Preços de referência de <b id="pd">30/10/2026</b> (não são cotações ao vivo) · upside = FV base ÷ preço − 1</div></div><button id="th">🌓 Tema</button></div>
+<div class="hd"><div><h1>📊 Ranking de Ações — Matriz Fundamentalista</h1><div class="sub">Preços de fechamento de <b id="pd">—</b> (atualizados todo dia útil às 19h) · upside = FV base ÷ preço − 1 · <a href="estatisticas.html">📈 Estatísticas e universo dos ativos →</a></div></div><button id="th">🌓 Tema</button></div>
 <div class="g k" id="kp"></div>
 <div class="cd" style="margin-top:12px"><h2>🏅 Ranking completo <span class="sub">(clique no cabeçalho para ordenar, na linha para ver o plano de entrada)</span></h2>
 <div class="f" id="fl"></div><div class="f"><select id="sf"></select></div><div class="sc"><table id="tb"></table></div></div>
@@ -50,7 +50,6 @@ input,select{font:inherit;color:var(--tx);background:var(--card);border:1px soli
 <div class="cd" style="margin-top:12px"><h2>🗓️ Calendário de balanços 3T26</h2><div class="tl" id="cl"></div>
 <div class="sub" style="margin-top:8px">⚠️ A análise cita o 3T26 de MOVI3 como já divulgado, mas o calendário lista 11/11 — confirme a data. Sem data na análise: SMAL11 (ETF), BBDC4, VLID3, MOTV3, HYPE3.</div></div>
 <div class="cd" style="margin-top:12px"><h2>🧭 Conclusões</h2><div class="dg" id="cn"></div></div>
-<div class="cd" id="uni" style="margin-top:12px"><h2 data-tip="Todos os ativos monitorados (ações brasileiras e SMAL11) com setor e preço de referência de 30/10/2026. Os marcados com a estrela já têm análise fundamentalista. O preço atual vem da atualização diária das 19h.">🌐 Universo monitorado <span class="i">ⓘ</span></h2><div class="f"><input id="uf" placeholder="Buscar ticker" style="width:150px"><select id="us"></select><label style="flex-direction:row;align-items:center;gap:6px"><input id="uo" type="checkbox" style="width:auto"> só analisados</label></div><div class="sub" id="uc" style="margin-bottom:6px"></div><div class="sc"><table id="ut"><thead><tr><th>Ativo</th><th>Setor</th><th>Preço ref. 30/10</th><th>Preço atual</th><th>Variação</th></tr></thead><tbody id="ub"></tbody></table></div></div>
 <div class="ft">Material de estudo baseado em análise fundamentalista e em estimativas. Não constitui recomendação de investimento, oferta ou consultoria. Preços e valores justos são de referência e podem estar desatualizados; rentabilidade passada não garante resultado futuro. Decida com base na sua própria análise. Caixa sugerido: 20–25% até o fim da temporada de resultados (3 a 12/11).</div>
 </div><div id="tip"></div><script>
 (async()=>{let PX={},PD="30/10/2026";try{const j=await (await fetch("prices.json?"+Date.now())).json();PX=j.prices||{};PD=j.date||PD}catch(e){}
@@ -84,14 +83,14 @@ let RAW=[
 ];
 if(AN&&AN.ativos&&AN.ativos.length)RAW=AN.ativos.filter(a=>a.valor_justo&&a.valor_justo.base>0&&a.compra&&a.compra.ideal_ate>0&&(PX[a.ticker]||rf[a.ticker])>0).map(toRow);
 const D=RAW.map(a=>({t:a[0],p:PX[a[0]]||a[1],ag:a[2],lo:a[3],hi:a[4],fv:a[5],rk:a[6],tr:a[7],w:a[8],dt:a[9],pl:a[10],up:(a[5]/(PX[a[0]]||a[1])-1)*100,s:(SU[a[0]]||SE[a[0]]||"—"),x:a[11]||{},n0:a[7]}));
-function histHtml(h){const ys=Object.keys(h.anos),vv=ys.map(y=>h.anos[y]),all=vv.filter(v=>v>0).concat([h.atual||0,h.ref?h.ref.valor:0]),mx=Math.max(...all,1);
+function histHtml(h){const ys=Object.keys(h.anos),vv=ys.map(y=>h.anos[y]),all=vv.filter(v=>v>0).concat([h.atual||0,h.ref?h.ref.valor:0]),mx=Math.max(...all,1),dd=x=>mx<3?f2(x):f1(x);
 const W=330,Hh=118,bw=28,gp=14,x0=26,yb=92,sc=v=>v/mx*68;let s='<svg viewBox="0 0 '+W+' '+Hh+'" style="max-width:360px;margin-top:6px">';
 ys.forEach((y,i)=>{const v=h.anos[y],x=x0+i*(bw+gp);
-if(v>0){const hh=sc(v);s+='<rect x="'+x+'" y="'+(yb-hh)+'" width="'+bw+'" height="'+hh+'" rx="3" fill="var(--ac)" opacity=".75"/><text x="'+(x+bw/2)+'" y="'+(yb-hh-3)+'" text-anchor="middle" style="font-size:9px">'+f1(v)+'</text>'}
+if(v>0){const hh=sc(v);s+='<rect x="'+x+'" y="'+(yb-hh)+'" width="'+bw+'" height="'+hh+'" rx="3" fill="var(--ac)" opacity=".75"/><text x="'+(x+bw/2)+'" y="'+(yb-hh-3)+'" text-anchor="middle" style="font-size:9px">'+dd(v)+'</text>'}
 else{s+='<text x="'+(x+bw/2)+'" y="'+(yb-4)+'" text-anchor="middle" style="font-size:9px;fill:var(--rd)">'+(v<0?"neg.":"n/d")+'</text>'}
 s+='<text x="'+(x+bw/2)+'" y="'+(yb+12)+'" text-anchor="middle">'+y+'</text>'});
-const xa=x0+ys.length*(bw+gp);if(h.atual>0){const hh=sc(h.atual);s+='<rect x="'+xa+'" y="'+(yb-hh)+'" width="'+bw+'" height="'+hh+'" rx="3" fill="var(--am)"/><text x="'+(xa+bw/2)+'" y="'+(yb-hh-3)+'" text-anchor="middle" style="font-size:9px">'+f1(h.atual)+'</text><text x="'+(xa+bw/2)+'" y="'+(yb+12)+'" text-anchor="middle">atual</text>'}
-if(h.ref&&h.ref.valor>0){const yy=yb-sc(h.ref.valor);s+='<line x1="'+(x0-6)+'" x2="'+(W-4)+'" y1="'+yy+'" y2="'+yy+'" stroke="var(--gr)" stroke-dasharray="4 3"/><text x="'+(W-4)+'" y="'+(yy-3)+'" text-anchor="end" style="fill:var(--gr);font-size:9px">'+h.ref.rotulo+' '+f1(h.ref.valor)+'x</text>'}
+const xa=x0+ys.length*(bw+gp);if(h.atual>0){const hh=sc(h.atual);s+='<rect x="'+xa+'" y="'+(yb-hh)+'" width="'+bw+'" height="'+hh+'" rx="3" fill="var(--am)"/><text x="'+(xa+bw/2)+'" y="'+(yb-hh-3)+'" text-anchor="middle" style="font-size:9px">'+dd(h.atual)+'</text><text x="'+(xa+bw/2)+'" y="'+(yb+12)+'" text-anchor="middle">atual</text>'}
+if(h.ref&&h.ref.valor>0){const yy=yb-sc(h.ref.valor);s+='<line x1="'+(x0-6)+'" x2="'+(W-4)+'" y1="'+yy+'" y2="'+yy+'" stroke="var(--gr)" stroke-dasharray="4 3"/><text x="'+(W-4)+'" y="'+(yy-3)+'" text-anchor="end" style="fill:var(--gr);font-size:9px">'+h.ref.rotulo+' '+dd(h.ref.valor)+'x</text>'}
 return '<br><b>'+h.indicador+' histórico ('+h.fonte+', '+h.data+'):</b> '+h.texto+s+'</svg>'}
 const RLn={1:"Baixo",1.5:"Baixo/médio",2:"Médio",2.5:"Médio/alto",3:"Alto"};
 D.forEach(d=>{const u=d.up,r=d.rk;d.tr=(r<=2&&u>=60)||(r<=1.5&&u>=40)?1:(u>=30&&r<=2.5?2:3);d.nt="Nível "+d.tr+": upside de "+Math.round(u)+"% e risco "+RLn[r]+". Regra: N1 = upside de 60% ou mais com risco até Médio, ou de 40% ou mais com risco até Baixo/médio; N2 = upside de 30% ou mais com risco até Médio/alto; N3 = os demais."+(d.n0&&d.n0!=d.tr&&d.x.og!="politica"?" Nível da análise original: N"+d.n0+".":"")});
@@ -100,7 +99,7 @@ const f1=x=>x.toFixed(1).replace(".",","),f2=x=>x.toFixed(2).replace(".",",");
 const zone=d=>d.p<=d.ag?["Agressiva","z1"]:d.p<=d.hi?["Ideal","z2"]:["Acima","z3"];
 const $=s=>document.querySelector(s);
 let sk="up",sd=-1,flt="all",open=null,sec="all";
-const TP={"#":"Posição no ranking conforme a ordenação atual da tabela.","t":"Ticker e nível de prioridade: N1 são as 5 principais, N2 as 5 seguintes e N3 as demais.","p":"Cotação de referência na data indicada no topo da página. Não é cotação ao vivo.","ag":"Preço máximo para compra agressiva. Até esse valor, a análise aceita entrar sem esperar o balanço.","lo":"Faixa de preço considerada ideal para comprar, sem pressa e sem exagero.","fv":"Valor justo no cenário base da análise. É uma estimativa, não um preço-alvo garantido.","up":"Quanto o preço precisa subir para chegar ao FV base: FV base ÷ preço − 1.","rk":"Risco qualitativo da análise (execução, dívida, resultado, política), de baixo/médio a alto.","w":"Percentual sugerido na carteira ideal hipotética de R$ 100 mil.","dt":"Data de divulgação do balanço do 3T26. Traço: sem data na análise.","z":"Agressiva: preço ≤ limite agressivo. Ideal: dentro da faixa ideal. Acima: acima do teto da faixa."};
+const TP={"#":"Posição no ranking conforme a ordenação atual da tabela.","t":"Ticker e nível de prioridade: N1 são as 5 principais, N2 as 5 seguintes e N3 as demais.","p":"Preço de fechamento da data indicada no topo da página, atualizado todo dia útil às 19h.","ag":"Preço máximo para compra agressiva. Até esse valor, a análise aceita entrar sem esperar o balanço.","lo":"Faixa de preço considerada ideal para comprar, sem pressa e sem exagero.","fv":"Valor justo no cenário base da análise. É uma estimativa, não um preço-alvo garantido.","up":"Quanto o preço precisa subir para chegar ao FV base: FV base ÷ preço − 1.","rk":"Risco qualitativo da análise (execução, dívida, resultado, política), de baixo/médio a alto.","w":"Percentual sugerido na carteira ideal hipotética de R$ 100 mil.","dt":"Data de divulgação do balanço do 3T26. Traço: sem data na análise.","z":"Agressiva: preço ≤ limite agressivo. Ideal: dentro da faixa ideal. Acima: acima do teto da faixa."};
 TP.s="Setor de atuação da empresa.";
 const KT={"Ativos":"Quantidade de ativos na matriz de oportunidades.","Upside médio simples":"Média do upside dos 20 ativos, todos com o mesmo peso.","Upside ponderado":"Upside médio ponderado pelos pesos da carteira ideal. Reflete melhor o retorno potencial da carteira.","Maior upside":"Ativo com maior distância entre o preço e o FV base. Maior upside também costuma significar maior risco de execução.","Em zona agressiva":"Ativos cujo preço atual já está igual ou abaixo do limite de compra agressiva.","Balanços até 12/11":"Ativos da lista com resultado do 3T26 com data conhecida na análise.","Caixa sugerido":"Parte da carteira mantida em caixa para aproveitar quedas durante a temporada de balanços."};
 const tip=document.getElementById("tip");
@@ -166,16 +165,4 @@ $("#cl").innerHTML=["03/11","04/11","05/11","09/11","10/11","11/11","12/11"].map
 // Conclusions
 $("#cn").innerHTML=[["🏆 Melhor assimetria","VIVA3 / DIRR3 / MDNE3"],["⚖️ Assimetria + qualidade","CYRE3 / TOTS3 / ALOS3"],["✅ Já com resultado","MOVI3"],["🏦 Large cap deep value","BBAS3"],["🧺 Diversificação","SMAL11"],["🛒 Recuperação consumo","ASAI3"],["🏗️ Desconto patrimonial","EZTC3 / JHSF3"],["🎯 Preços de ataque","MDNE3 R$15–16 · DIRR3 R$7–8 · VIVA3 R$16–17 · CYRE3 R$15–17 · MOVI3 R$5–5,50"]].map(c=>`<div class="cd"><div class="kl">${c[0]}</div><b>${c[1]}</b></div>`).join("");
 $("#th").onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).colorScheme=="dark";r.dataset.theme=d?"light":"dark"};
-if(UN&&UN.ativos){
-const own=new Set(D.map(d=>d.t)),pr=Object.assign({},PX);D.forEach(d=>pr[d.t]=d.p);
-const sts=[...new Set(UN.ativos.map(a=>a.setor))].sort();
-$("#us").innerHTML='<option value="all">Todos os setores</option>'+sts.map(x=>`<option>${x}</option>`).join("");
-let uq="",ug="all",uo=false;
-function ut(){const r=UN.ativos.filter(a=>(ug=="all"||a.setor==ug)&&(!uo||own.has(a.ticker))&&a.ticker.includes(uq));
-$("#ub").innerHTML=r.map(a=>{const p=pr[a.ticker],ref=a.preco_ref_30_10,v=p&&ref?(p/ref-1)*100:null;return `<tr><td><b>${a.ticker}</b>${own.has(a.ticker)?' <span class="tg z1">★</span>':''}</td><td>${a.setor}</td><td>${ref==null?"—":f2(ref)}</td><td>${p?f2(p):"—"}</td><td>${v==null?"—":(v>=0?"+":"")+f1(v)+"%"}</td></tr>`}).join("");
-$("#uc").textContent=r.length+" de "+UN.ativos.length+" ativos"}
-$("#uf").oninput=e=>{uq=e.target.value.toUpperCase().trim();ut()};
-$("#us").onchange=e=>{ug=e.target.value;ut()};
-$("#uo").onchange=e=>{uo=e.target.checked;ut()};
-ut()}else{$("#uni").style.display="none"}
 })();</script></body></html>
