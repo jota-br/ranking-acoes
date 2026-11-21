@@ -1,5 +1,5 @@
 ```
-== Historico B3 com preco ajustado por proventos 2026-11-19 ==
+== Historico B3 com preco ajustado por proventos 2026-11-21 ==
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2015.ZIP | linhas aproveitadas: 23329
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2016.ZIP | linhas aproveitadas: 23940
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2017.ZIP | linhas aproveitadas: 24774
@@ -11,15 +11,15 @@ OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2022.ZIP | linhas 
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2023.ZIP | linhas aproveitadas: 36320
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2024.ZIP | linhas aproveitadas: 37225
 OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2025.ZIP | linhas aproveitadas: 37377
-OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2026.ZIP | linhas aproveitadas: 33345
-Linhas do historico diario da brapi acrescentadas apos o ultimo dia da B3: 5
+OK https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A2026.ZIP | linhas aproveitadas: 33496
+Linhas do historico diario da brapi acrescentadas apos o ultimo dia da B3: 156
 Proventos: empresas encontradas na B3: 151 | sem empresa: 12 ALSC3, ARZZ3, BRDT3, BVMF3, CCRO3, ELET3, ESTC3, GUAR3, MRFG3, SMAL11, TIMP3, TRPL4 | sem eventos para a classe: 7 ABEV3, CURY3, EMBR3, KLBN11, LIGT3, ONCO3, ORVR3
 
 Tickers com historico: 152 | sem nenhum dado: 0 
 Series emendadas pelo ticker anterior: ALOS3<-ALSC3, AXIA3<-ELET3, AZZA3<-ARZZ3, B3SA3<-BVMF3, EMBJ3<-EMBR3, ISAE4<-TRPL4, MBRF3<-MRFG3, MOTV3<-CCRO3, RIAA3<-GUAR3, TIMS3<-TIMP3, VBBR3<-BRDT3, YDUQ3<-ESTC3
-Historico curto (<8 anos): 43 AMER3(5.3a), ARML3(5.3a), ASAI3(5.7a), AUAU3(0.9a), AURE3(4.6a), BHIA3(3.2a), BLAU3(5.6a), BMGB4(7.0a), BMOB3(5.8a), BRAV3(2.2a), CEAB3(7.1a), CMIN3(5.7a), COGN3(7.1a), CURY3(6.2a), CXSE3(5.6a), DESK3(5.3a), DXCO3(5.2a), GGPS3(5.6a), GMAT3(6.1a), IGTI11(5.0a), INTB3(5.8a), JALL3(5.8a), LAND3(5.3a), LJQQ3(6.3a), LOGG3(7.9a), LWSA3(6.8a), MATD3(5.6a), MDNE3(6.8a), MTRE3(6.8a), ONCO3(5.3a), ORVR3(5.7a), PGMN3(6.2a), RAIZ4(5.3a), RDOR3(5.9a), RECV3(5.5a), SAUD3(0.5a), SBFG3(5.6a), SIMH3(6.2a), SMFT3(5.3a), TASA4(7.0a), TTEN3(5.3a), VAMO3(5.8a), VIVA3(7.1a)
+Historico curto (<8 anos): 43 AMER3(5.3a), ARML3(5.3a), ASAI3(5.7a), AUAU3(0.9a), AURE3(4.6a), BHIA3(3.2a), BLAU3(5.6a), BMGB4(7.0a), BMOB3(5.8a), BRAV3(2.2a), CEAB3(7.1a), CMIN3(5.7a), COGN3(7.1a), CURY3(6.2a), CXSE3(5.6a), DESK3(5.3a), DXCO3(5.3a), GGPS3(5.6a), GMAT3(6.1a), IGTI11(5.0a), INTB3(5.8a), JALL3(5.8a), LAND3(5.3a), LJQQ3(6.3a), LOGG3(7.9a), LWSA3(6.8a), MATD3(5.6a), MDNE3(6.8a), MTRE3(6.8a), ONCO3(5.3a), ORVR3(5.8a), PGMN3(6.2a), RAIZ4(5.3a), RDOR3(5.9a), RECV3(5.5a), SAUD3(0.5a), SBFG3(5.6a), SIMH3(6.2a), SMFT3(5.3a), TASA4(7.0a), TTEN3(5.4a), VAMO3(5.8a), VIVA3(7.1a)
 Proventos aplicados no ajuste: 3843 | ignorados (fora da serie, sem preco ou valor absurdo): 3594
-Desdobramentos/grupamentos aplicados: 69 | saltos reais mantidos (nao ajustados): 34
+Desdobramentos/grupamentos aplicados: 70 | saltos reais mantidos (nao ajustados): 34
    aplicado: AMER3 2024-11-14 grupamento 3:1 fator 2.801
    aplicado: ANIM3 2021-02-19 desdobramento 3:1 fator 0.337
    aplicado: ARML3 2026-10-26 desdobramento 2:1 fator 0.469
@@ -72,13 +72,13 @@ Desdobramentos/grupamentos aplicados: 69 | saltos reais mantidos (nao ajustados)
    mantido: PCAR3 2017-02-01 variacao +139%
 
 Efeito do ajuste (retorno de preco bruto x ajustado, 12 meses) e DY 12m:
-   PETR4: bruto +30.0% | ajustado +40.4% | DY 12m 6.9% | vol 90d 37%
-   ITUB4: bruto -2.5% | ajustado +5.4% | DY 12m 7.9% | vol 90d 38%
-   BBAS3: bruto -39.8% | ajustado -38.0% | DY 12m 4.9% | vol 90d 63%
-   VALE3: bruto -9.3% | ajustado -2.0% | DY 12m 9.5% | vol 90d 28%
-   TAEE11: bruto -4.4% | ajustado +2.7% | DY 12m 5.1% | vol 90d 27%
-   PRIO3: bruto +53.5% | ajustado +53.5% | DY 12m 0.0% | vol 90d 39%
-   BOVA11: bruto +6.2% | ajustado +6.2% | DY 12m 0.0% | vol 90d 33%
+   PETR4: bruto +31.3% | ajustado +41.8% | DY 12m 7.0% | vol 90d 37%
+   ITUB4: bruto -0.9% | ajustado +7.1% | DY 12m 7.9% | vol 90d 38%
+   BBAS3: bruto -36.4% | ajustado -34.5% | DY 12m 4.8% | vol 90d 63%
+   VALE3: bruto -10.9% | ajustado -3.8% | DY 12m 9.6% | vol 90d 28%
+   TAEE11: bruto -10.6% | ajustado -4.0% | DY 12m 5.1% | vol 90d 27%
+   PRIO3: bruto +51.1% | ajustado +51.1% | DY 12m 0.0% | vol 90d 39%
+   BOVA11: bruto +5.9% | ajustado +5.9% | DY 12m 0.0% | vol 90d 33%
 
 == Fim ==
 ```
